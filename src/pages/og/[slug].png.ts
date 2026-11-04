@@ -36,7 +36,8 @@ export async function GET({ props }: APIContext) {
   <rect x="560" y="0" width="220" height="630" fill="url(#fade)"/>
   <text x="64" y="110" font-family="DejaVu Sans Mono, monospace" font-size="26" fill="#7cc6ff">DOUTOR COSMOS</text>
   ${lines.map((l, i) => `<text x="64" y="${y0 + i * 54}" font-family="DejaVu Sans, Arial, sans-serif" font-size="44" font-weight="700" fill="#e8ecff">${esc(l)}</text>`).join('')}
-  <text x="64" y="560" font-family="DejaVu Sans, Arial, sans-serif" font-size="24" fill="#ffd166">Astrofísica em português de Portugal, com fontes</text>
+  <text x="64" y="540" font-family="DejaVu Sans, Arial, sans-serif" font-size="24" fill="#ffd166">Astrofísica em português</text>
+  <text x="64" y="572" font-family="DejaVu Sans, Arial, sans-serif" font-size="24" fill="#ffd166">de Portugal, com fontes</text>
 </svg>`;
   const character = await readFile(join(process.cwd(), 'src', 'assets', 'doutor-cosmos-630.webp'));
   const png = await sharp(Buffer.from(bg))
