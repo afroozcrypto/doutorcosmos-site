@@ -1,0 +1,30 @@
+---
+import { LICENCES } from '../lib/licences.mjs';
+import { fmtDate } from '../lib/site';
+interface Src { role: 'A' | 'B'; name: string; url: string; licence: string; credit?: string; accessed: Date; }
+const { sources } = Astro.props as { sources: Src[] };
+---
+<ul class="sources">
+  {sources.map((s) => {
+    const lic = LICENCES[s.licence as keyof typeof LICENCES];
+    return (
+      <li>
+        <span class="role">Fonte {s.role}</span>
+        <a href={s.url} rel="noopener">{s.name}</a>
+        {s.credit && <p class="credit">Crédito: {s.credit}</p>}
+        <p class="small muted">
+          Licença: {lic.url ? <a href={lic.url} rel="license noopener">{lic.label}</a> : lic.label}
+          {lic.policy && <> · <a href={lic.policy} rel="noopener">regras da fonte</a></>}
+          · consultado a {fmtDate(s.accessed)}
+        </p>
+      </li>
+    );
+  })}
+</ul>
+<style>
+  .sources { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--s-3); }
+  .sources li { border-left: 3px solid var(--c-accent-2); padding-left: var(--s-3); }
+  .role { display: block; font-size: var(--t-sm); font-weight: 700; color: var(--c-accent); }
+  .credit { margin: var(--s-1) 0; }
+  .sources p { margin-bottom: 0; }
+</style>

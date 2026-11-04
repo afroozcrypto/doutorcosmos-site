@@ -1,0 +1,25 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE, href } from '../lib/site';
+---
+<Base title="Sobre" description="O Doutor Cosmos é uma personagem criada com IA, feita por João Conde. Cada facto tem fonte na ficha do vídeo.">
+  <div class="prose">
+    <h1>Sobre</h1>
+    <p>O Doutor Cosmos é uma personagem criada com IA. A voz e as imagens são geradas por IA. Os factos não: cada um tem fonte na <a href={href('/fontes/')}>ficha do vídeo</a>.</p>
+    <figure class="persona">
+      <img src={href('/img/doutor-cosmos-400.webp')} width="400" height="400" alt="Doutor Cosmos, personagem do canal gerada com IA" decoding="async" />
+      <figcaption>Personagem do canal, gerada com IA</figcaption>
+    </figure>
+    <h2>Quem faz</h2>
+    <p>João Conde, técnico de automação. Não sou astrónomo: escrevo o que as fontes publicaram e cito cada uma. As sessões ao vivo, <a href={href('/sessoes/')}>Ouve o Universo</a>, sou eu que as dinamizo, presencialmente.</p>
+    <h2>Contacto</h2>
+    <p>Contacto: <a href={`mailto:${SITE.email}`}>{SITE.email}</a></p>
+    <p>Canal: <a href={SITE.channel} rel="noopener">Doutor Cosmos no YouTube</a></p>
+  </div>
+</Base>
+
+<style>
+  .persona { margin: var(--s-5) 0; max-width: 320px; }
+  .persona img { width: 100%; height: auto; border-radius: var(--r-2); border: 1px solid var(--c-line); }
+  .persona figcaption { font-size: var(--t-sm); color: var(--c-muted); margin-top: var(--s-2); }
+</style>

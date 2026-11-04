@@ -1,0 +1,65 @@
+---
+// Partículas decorativas no fundo do hero. Só em ecrãs com pelo menos 900 px,
+// no máximo 40 partículas, desligado com prefers-reduced-motion, pausa com a aba escondida.
+// O script é empacotado pelo Astro num ficheiro em /_astro/ (CSP script-src 'self').
+---
+<canvas class="particles" aria-hidden="true"></canvas>
+<style>
+  .particles { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; display: none; }
+  @media (min-width: 900px) and (prefers-reduced-motion: no-preference) { .particles { display: block; } }
+</style>
+<script>
+  const MAX = 40;
+  const wide = window.matchMedia('(min-width: 900px)');
+  const calm = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const canvas = document.querySelector<HTMLCanvasElement>('canvas.particles');
+  const ctx = canvas?.getContext('2d');
+  let raf = 0;
+  let pts: { x: number; y: number; vx: number; vy: number; r: number }[] = [];
+
+  function size() {
+    if (!canvas) return;
+    const r = canvas.getBoundingClientRect();
+    canvas.width = Math.round(r.width);
+    canvas.height = Math.round(r.height);
+  }
+  function seed() {
+    if (!canvas) return;
+    pts = Array.from({ length: MAX }, () => ({
+      x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+      vx: (Math.random() - 0.5) * 0.2, vy: (Math.random() - 0.5) * 0.2, r: Math.random() * 1.2 + 0.4,
+    }));
+  }
+  function frame() {
+    if (!canvas || !ctx) return;
+    const { width: w, height: h } = canvas;
+    ctx.clearRect(0, 0, w, h);
+    for (let i = 0; i < pts.length; i++) {
+      const p = pts[i];
+      p.x = (p.x + p.vx + w) % w; p.y = (p.y + p.vy + h) % h;
+      ctx.fillStyle = 'rgba(232,236,255,.55)';
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
+      for (let j = i + 1; j < pts.length; j++) {
+        const q = pts[j]; const d = Math.hypot(p.x - q.x, p.y - q.y);
+        if (d < 110) {
+          ctx.strokeStyle = `rgba(124,198,255,${0.22 * (1 - d / 110)})`;
+          ctx.lineWidth = 0.6; ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(q.x, q.y); ctx.stroke();
+        }
+      }
+    }
+    raf = requestAnimationFrame(frame);
+  }
+  function stop() { cancelAnimationFrame(raf); raf = 0; }
+  function sync() {
+    const run = wide.matches && !calm.matches && !document.hidden;
+    if (run && !raf) { size(); if (!pts.length) seed(); raf = requestAnimationFrame(frame); }
+    if (!run && raf) stop();
+  }
+  if (canvas && ctx) {
+    wide.addEventListener('change', sync);
+    calm.addEventListener('change', sync);
+    document.addEventListener('visibilitychange', sync);
+    window.addEventListener('resize', () => { if (raf) size(); });
+    sync();
+  }
+</script>

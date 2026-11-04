@@ -1,0 +1,101 @@
+---
+import Base from '../layouts/Base.astro';
+import JsonLd from '../components/JsonLd.astro';
+import VideoEmbed from '../components/VideoEmbed.astro';
+import Ripples from '../components/Ripples.astro';
+import ParticleField from '../components/ParticleField.astro';
+import { SITE, publishedShorts, publishedPosts, href } from '../lib/site';
+const shorts = await publishedShorts();
+// Peça de entrada: o Perseu (a única ficha publicada com "medido, traduzido, escolhido").
+const entry = shorts.find((s) => s.id === 'perseus-som-buraco-negro') ?? shorts[0];
+const site = new URL(href('/'), Astro.site).href;
+// Contagens reais, calculadas no build. O bloco só aparece com pelo menos 3 fichas publicadas,
+// e uma contagem a 0 não aparece.
+const reviewed = (await publishedPosts()).filter((p) => p.data.reviewed).length;
+const sourceCount = new Set(shorts.flatMap((s) => s.data.sources.map((x) => x.url))).size;
+const stats = [
+  { n: shorts.length, label: shorts.length === 1 ? 'ficha de fonte' : 'fichas de fonte' },
+  { n: sourceCount, label: sourceCount === 1 ? 'fonte citada' : 'fontes citadas' },
+  { n: reviewed, label: reviewed === 1 ? 'notícia revista' : 'notícias revistas' },
+].filter((x) => x.n > 0);
+const showStats = shorts.length >= 3;
+const ld = [
+  { '@type': 'WebSite', name: SITE.name, url: site, inLanguage: 'pt-PT' },
+  { '@type': 'Organization', name: SITE.name, url: site, email: SITE.email, sameAs: [SITE.channel] },
+];
+---
+<Base title="Doutor Cosmos: o universo em 30 segundos, com fontes" description="Vídeos curtos de astrofísica em português de Portugal. Cada vídeo tem uma ficha com as fontes e o que foi medido.">
+  <JsonLd slot="head" data={ld} />
+
+  <section class="hero">
+    <ParticleField />
+    <Ripples />
+    <div class="hero-text">
+      <img class="avatar" src={href('/img/doutor-cosmos-400.webp')} width="120" height="120" alt="Doutor Cosmos, personagem do canal gerada com IA" decoding="async" fetchpriority="high" />
+      <h1>O universo em 30 segundos. <span>Com fontes.</span></h1>
+      <p class="lead">O Doutor Cosmos faz vídeos curtos de astrofísica em português de Portugal. Cada vídeo tem uma ficha com as fontes e o que foi medido.</p>
+      <div class="actions">
+        <a class="btn" href={href('/sessoes/')}>Sessão ao vivo</a>
+        <a class="more" href={href('/fontes/')}>Ver as fontes dos vídeos →</a>
+      </div>
+      {showStats && (
+        <ul class="stats">
+          {stats.map((x) => <li><b>{x.n}</b><span>{x.label}</span></li>)}
+        </ul>
+      )}
+    </div>
+  </section>
+
+  {entry && (
+    <section class="entry" aria-labelledby="entrada">
+      <p class="eyebrow">Comece por aqui</p>
+      <h2 id="entrada">{entry.data.headline ?? entry.data.title}</h2>
+      <div class="entry-grid">
+        <div>
+          {entry.data.explain ? (
+            <dl class="mtc">
+              <div><dt>Medido</dt><dd>{entry.data.explain.measured}</dd></div>
+              <div><dt>Traduzido</dt><dd>{entry.data.explain.translated}</dd></div>
+              <div><dt>Escolhido</dt><dd>{entry.data.explain.chosen}</dd></div>
+            </dl>
+          ) : <p class="muted">{entry.data.description}</p>}
+          <p><a href={href(`/fontes/${entry.id}/`)}>Ficha completa, com as fontes A e B →</a></p>
+          {entry.data.interactive === 'oitavas' && <p><a href={href(`/fontes/${entry.id}/#oct-t`)}>Experimente subir as 57 oitavas, com som →</a></p>}
+        </div>
+        <div class="vid"><VideoEmbed id={entry.data.youtubeId} title={entry.data.title} /></div>
+      </div>
+    </section>
+  )}
+</Base>
+<style>
+  .hero { position: relative; isolation: isolate; padding: var(--s-6) var(--s-4) var(--s-5); margin-top: var(--s-4); border: 1px solid var(--c-line); border-radius: var(--r-2); overflow: hidden; background: linear-gradient(180deg, #131c3d99, #070b17e6); }
+  /* Borda a rodar: só em ecrãs largos e sem movimento reduzido. */
+  .hero::before { content: ''; position: absolute; inset: -40%; z-index: -1; background: conic-gradient(from 0deg, transparent 0 70%, #7cc6ff40 80%, transparent 90%); opacity: 0; }
+  @media (min-width: 900px) and (prefers-reduced-motion: no-preference) {
+    .hero::before { opacity: 1; will-change: transform; animation: rodar 16s linear infinite 2.5s; }
+  }
+  @keyframes rodar { to { transform: rotate(360deg); } }
+  .stats { list-style: none; display: flex; flex-wrap: wrap; gap: var(--s-3); padding: 0; margin: var(--s-5) 0 0; }
+  .stats li { background: var(--c-surface); border: 1px solid var(--c-line); border-radius: var(--r-1); padding: var(--s-2) var(--s-4); min-width: 8rem; }
+  .stats b { display: block; color: var(--c-accent); font-size: var(--t-lg); }
+  .stats span { font-size: var(--t-sm); color: var(--c-muted); }
+  @media (min-width: 56rem) { .hero { padding: var(--s-8) var(--s-7) var(--s-7); } }
+  .hero-text { position: relative; z-index: 1; max-width: 42rem; }
+  .avatar { width: 88px; height: 88px; border-radius: 50%; border: 2px solid #b87333; margin-bottom: var(--s-4); object-fit: cover; }
+  @media (min-width: 56rem) { .avatar { width: 120px; height: 120px; } }
+  .hero h1 { font-size: clamp(2.2rem, 8.5vw, 4.25rem); letter-spacing: -.03em; }
+  .hero h1 span { color: var(--c-accent); }
+  .lead { font-size: var(--t-lg); color: var(--c-text); max-width: 36rem; }
+  .actions { display: flex; flex-wrap: wrap; gap: var(--s-3) var(--s-5); align-items: center; margin-top: var(--s-5); }
+  .more { font-weight: 700; display: inline-block; padding: var(--s-2) 0; }
+  .entry { margin-top: var(--s-5); }
+  .entry h2 { margin-top: 0; max-width: 40rem; }
+  .entry-grid { display: grid; gap: var(--s-5); align-items: start; }
+  @media (min-width: 56rem) { .entry-grid { grid-template-columns: 1fr 300px; gap: var(--s-7); } }
+  .vid { max-width: 240px; }
+  @media (min-width: 56rem) { .vid { max-width: none; } }
+  .mtc { display: grid; gap: var(--s-3); margin: 0 0 var(--s-4); }
+  .mtc div { border-left: 3px solid var(--c-accent-2); padding-left: var(--s-4); }
+  .mtc dt { font: 700 var(--t-sm)/1.6 var(--f-mono); text-transform: uppercase; letter-spacing: .06em; color: var(--c-accent); }
+  .mtc dd { margin: 0; }
+</style>

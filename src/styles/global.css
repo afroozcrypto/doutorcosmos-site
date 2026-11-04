@@ -1,0 +1,70 @@
+@import './tokens.css';
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; min-height: 100vh;
+  font: 400 var(--t-base)/1.65 var(--f-sans);
+  color: var(--c-text);
+  background-color: var(--c-bg);
+  background-image:
+    radial-gradient(1px 1px at 12% 18%, #ffffffb0 50%, transparent 51%),
+    radial-gradient(1px 1px at 68% 8%, #ffffff90 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 85% 32%, #ffffffa0 50%, transparent 51%),
+    radial-gradient(1px 1px at 33% 62%, #ffffff80 50%, transparent 51%),
+    radial-gradient(1px 1px at 92% 74%, #ffffff90 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 6% 88%, #ffffff80 50%, transparent 51%),
+    radial-gradient(1200px 600px at 80% -10%, #1b2a6b66, transparent 60%),
+    radial-gradient(900px 500px at -10% 10%, #3a1b6b44, transparent 60%);
+  background-size: 640px 640px, 640px 640px, 640px 640px, 640px 640px, 640px 640px, 640px 640px, auto, auto;
+}
+h1, h2, h3 { line-height: 1.2; margin: 0 0 var(--s-3); text-wrap: balance; }
+h1 { font-size: var(--t-2xl); letter-spacing: -.02em; }
+h2 { font-size: var(--t-xl); margin-top: var(--s-6); }
+h3 { font-size: var(--t-lg); }
+p, li { text-wrap: pretty; }
+p { margin: 0 0 var(--s-4); }
+a { color: var(--c-accent-2); text-underline-offset: 3px; }
+a:hover { color: var(--c-accent); }
+img, svg, iframe { max-width: 100%; display: block; }
+:focus-visible { outline: 3px solid var(--c-accent); outline-offset: 3px; border-radius: 2px; }
+.wrap { width: min(100% - 2rem, var(--w-page)); margin-inline: auto; }
+.prose { max-width: var(--w-text); }
+.muted { color: var(--c-muted); }
+.eyebrow { font: 600 var(--t-sm)/1.4 var(--f-mono); text-transform: uppercase; letter-spacing: .08em; color: var(--c-accent-2); margin-bottom: var(--s-3); }
+.small { font-size: var(--t-sm); }
+.card { background: var(--c-surface); border: 1px solid var(--c-line); border-radius: var(--r-2); padding: var(--s-5); }
+.grid { display: grid; gap: var(--s-4); }
+@media (min-width: 48rem) { .grid-3 { grid-template-columns: repeat(3, 1fr); } .grid-2 { grid-template-columns: repeat(2, 1fr); } }
+.btn {
+  display: inline-block; padding: .8rem 1.2rem; min-height: 48px; border-radius: var(--r-1);
+  background: var(--c-accent); color: #111; font-weight: 700; text-decoration: none;
+}
+.btn:hover { color: #111; filter: brightness(1.08); }
+.skip { position: absolute; left: -999px; top: var(--s-2); background: var(--c-accent); color: #111; padding: var(--s-2) var(--s-4); z-index: 10; border-radius: var(--r-1); }
+.skip:focus { left: var(--s-2); }
+.tag { display: inline-block; font-size: var(--t-sm); font-weight: 700; padding: .1rem .55rem; border-radius: 999px; border: 1px solid currentColor; }
+.tag-verificado { color: var(--c-ok); } .tag-plausivel { color: var(--c-warn); } .tag-especulativo { color: var(--c-spec); }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+
+/* Fundo HUD: grelha estática com máscara radial e linha de varrimento.
+   A linha só se move em ecrãs largos e sem prefers-reduced-motion (transform, sem repintar). */
+.hud { position: fixed; inset: 0; z-index: -1; pointer-events: none; display: none; }
+/* A grelha HUD só aparece em ecrãs largos: em telemóvel custava desempenho no Lighthouse. */
+@media (min-width: 900px) { .hud { display: block; } }
+.hud-grid {
+  position: absolute; inset: 0; opacity: .09;
+  background-image: linear-gradient(var(--c-accent-2) 1px, transparent 1px), linear-gradient(90deg, var(--c-accent-2) 1px, transparent 1px);
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(ellipse at 50% 30%, #000 20%, transparent 70%);
+  mask-image: radial-gradient(ellipse at 50% 30%, #000 20%, transparent 70%);
+}
+.hud-scan { position: absolute; left: 0; right: 0; top: 0; height: 1px; opacity: 0; background: linear-gradient(90deg, transparent, var(--c-accent-2), transparent); }
+@media (min-width: 900px) and (prefers-reduced-motion: no-preference) {
+  .hud-scan { opacity: .35; will-change: transform; animation: varrer 14s linear infinite 3s; }
+}
+@keyframes varrer { from { transform: translateY(0); } to { transform: translateY(100vh); } }
+
+/* Pílulas de tags reais. */
+.pills { display: flex; flex-wrap: wrap; gap: var(--s-2); margin: 0; padding: 0; list-style: none; }
+.pill { font-size: var(--t-sm); padding: .15rem .6rem; border-radius: 999px; border: 1px solid var(--c-line); background: var(--c-bg-2); color: var(--c-muted); }
+.pill-strong { color: var(--c-accent-2); border-color: #7cc6ff55; }

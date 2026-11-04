@@ -1,0 +1,25 @@
+---
+import Base from '../layouts/Base.astro';
+import { publishedShorts, fmtDate, href } from '../lib/site';
+const items = (await publishedShorts())
+  .flatMap((s) => s.data.corrections.map((c) => ({ ...c, short: s })))
+  .sort((a, b) => b.date.valueOf() - a.date.valueOf());
+---
+<Base title="Correções" description="Registo público das correções feitas aos vídeos e às fichas do Doutor Cosmos.">
+  <div class="prose">
+    <h1>Correções</h1>
+    <p class="muted">Cada correção indica o que estava, o que ficou e a fonte.</p>
+    {items.length === 0 ? <p>Sem correções publicadas.</p> : (
+      <ul class="list">
+        {items.map((c) => (
+          <li>
+            <p class="small muted"><time datetime={c.date.toISOString()}>{fmtDate(c.date)}</time> · <a href={href(`/fontes/${c.short.id}/`)}>{c.short.data.title}</a></p>
+            <p><strong>Antes:</strong> {c.before}</p>
+            <p><strong>Agora:</strong> {c.after} <a href={c.source} rel="noopener">Fonte</a></p>
+          </li>
+        ))}
+      </ul>
+    )}
+  </div>
+</Base>
+<style>.list { list-style: none; padding: 0; } .list li { border-bottom: 1px solid var(--c-line); padding: var(--s-3) 0; }</style>

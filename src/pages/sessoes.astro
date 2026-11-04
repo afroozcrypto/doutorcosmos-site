@@ -1,0 +1,48 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE, href } from '../lib/site';
+const mail = `mailto:${SITE.email}?subject=${encodeURIComponent('Ouve o Universo: pedido de informação')}`;
+---
+<Base title="Ouve o Universo: sessão ao vivo de escuta guiada" description="Sessão ao vivo de escuta guiada, 45 minutos: dados reais de telescópios da NASA, traduzidos em som. Em preparação.">
+  <div class="prose">
+    <h1>Ouve o Universo</h1>
+    <p class="lead">Sessão ao vivo de escuta guiada, 45 minutos: dados reais de telescópios da NASA, traduzidos em som.</p>
+    <p class="status small">Em preparação. Ainda não há nenhuma sessão marcada nem confirmada.</p>
+
+    <h2>O que é</h2>
+    <p>Ouvimos uma estrela que vibra e o gás de um enxame de galáxias. Os sons são sonificações da NASA. Em cada um explico o que foi medido, o que foi traduzido em som e o que foi escolhido.</p>
+
+    <h2>Peças (exemplos)</h2>
+    <ul class="pieces">
+      <li>
+        <strong>HD 31901</strong>, medida pelo TESS (27 dias de brilho acelerados cerca de 54 000 vezes).
+        <span class="credit">Crédito: NASA's Goddard Space Flight Center e Simon Murphy, University of Sydney. <a href="https://svs.gsfc.nasa.gov/13605/" rel="noopener">Fonte</a></span>
+      </li>
+      <li>
+        <strong>Aglomerado de Perseu</strong>, medido pelo Chandra: ondas de pressão no gás do enxame. A nota original está 57 oitavas abaixo do dó central; a sonificação subiu a gravação 57 e 58 oitavas.
+        <span class="credit">Crédito: NASA/CXC/SAO e SYSTEM Sounds. <a href="https://chandra.si.edu/sound/perseus.html" rel="noopener">Fonte</a></span>
+      </li>
+    </ul>
+
+    <p><a href={href('/fontes/perseus-som-buraco-negro/#oct-t')}>Ouça uma amostra: suba as 57 oitavas do Perseu, com som →</a></p>
+
+    <h2>Quem conduz</h2>
+    <p>João Conde, técnico de automação e criador do Doutor Cosmos. Não sou astrónomo: a sessão conta o que a NASA publicou e cita a fonte de cada som. A personagem do canal é feita com IA; a sessão é dinamizada por mim, presencialmente.</p>
+
+    <h2>Acessibilidade</h2>
+    <p>Quero testar a sessão com pessoas cegas ou com baixa visão, para a tornar acessível. Ainda não o fiz.</p>
+
+    <h2>Contacto</h2>
+    <p>Para saber mais: <a href={mail}>{SITE.email}</a>.</p>
+    <p><a class="btn" href={mail}>Pedir informação por email</a></p>
+
+    <p class="small muted">O uso de material da NASA não implica apoio da NASA.</p>
+  </div>
+</Base>
+<style>
+  .status { border-left: 3px solid var(--c-warn); padding-left: var(--s-3); color: var(--c-warn); }
+  .lead { font-size: var(--t-lg); color: var(--c-muted); }
+  .pieces { padding-left: 1.2rem; display: grid; gap: var(--s-3); }
+  .credit { display: block; font-size: var(--t-sm); color: var(--c-muted); margin-top: var(--s-1); }
+  .credit a { display: inline-block; padding: .3rem 0; }
+</style>

@@ -1,0 +1,9 @@
+{
+  // Nome do Worker [por confirmar pelo Conde]. Site Astro estático: sem adaptador.
+  "name": "doutorcosmos-site",
+  "compatibility_date": "2026-10-26",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page"
+  }
+}
