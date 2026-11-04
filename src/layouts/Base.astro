@@ -23,7 +23,8 @@ const here = Astro.url.pathname;
     <meta name="description" content={description} />
     {(IS_PREVIEW || noindex) && <meta name="robots" content="noindex, nofollow" />}
     <link rel="canonical" href={canonical} />
-    <link rel="icon" href={href('/favicon.svg')} type="image/svg+xml" />
+    <link rel="icon" href={href('/favicon-32.png')} type="image/png" sizes="32x32" />
+    <link rel="apple-touch-icon" href={href('/apple-touch-icon.png')} sizes="180x180" />
     <link rel="alternate" type="application/rss+xml" title="Doutor Cosmos: notícias" href={href('/rss.xml')} />
     <link rel="sitemap" href={href('/sitemap-index.xml')} />
     <meta name="theme-color" content="#070b17" />
@@ -45,7 +46,7 @@ const here = Astro.url.pathname;
     <a class="skip" href="#conteudo">Saltar para o conteúdo</a>
     <header class="top">
       <div class="wrap bar">
-        <a class="brand" href={href('/')}>Doutor Cosmos</a>
+        <a class="brand" href={href('/')}><img src={href('/img/doutor-cosmos-96.webp')} width="32" height="32" alt="Doutor Cosmos, personagem do canal gerada com IA" decoding="async" /><span>Doutor Cosmos</span></a>
         <nav aria-label="Principal">
           <ul>
             {nav.map(([path, label]) => <li><a href={href(path)} aria-current={here.startsWith(href(path)) ? 'page' : undefined}>{label}</a></li>)}
@@ -71,7 +72,8 @@ const here = Astro.url.pathname;
   /* Vidro (desfoque) só em ecrãs largos: em telemóvel custava desempenho no Lighthouse. */
   @media (min-width: 900px) { .top { background: #070b17b3; -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); } }
   .bar { display: flex; flex-wrap: wrap; gap: 0 var(--s-5); align-items: center; justify-content: space-between; padding: var(--s-2) 0; }
-  .brand { font-weight: 800; color: var(--c-text); text-decoration: none; font-size: var(--t-lg); }
+  .brand { font-weight: 800; color: var(--c-text); text-decoration: none; font-size: var(--t-lg); display: inline-flex; align-items: center; gap: var(--s-2); }
+  .brand img { width: 32px; height: 32px; border-radius: 50%; border: 1px solid #b87333; }
   nav ul { list-style: none; display: flex; flex-wrap: wrap; gap: 0 var(--s-1); margin: 0 0 0 calc(-1 * var(--s-2)); padding: 0; }
   nav a { display: inline-block; padding: var(--s-2) var(--s-2); color: var(--c-muted); text-decoration: none; font-weight: 600; min-height: 44px; line-height: 28px; }
   nav a[aria-current='page'], nav a:hover { color: var(--c-accent); }
