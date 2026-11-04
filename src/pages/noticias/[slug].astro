@@ -50,6 +50,7 @@ const ld = [
       {post.data.credit && <p>{post.data.credit}</p>}
       <h2>Como foi feito</h2>
       <p>{post.data.madeWith}</p>
+      {post.data.reviewed && <p>Revisto por João Conde a <time datetime={post.data.reviewed.toISOString()}>{fmtDate(post.data.reviewed)}</time>.</p>}
       {short && <p>Vídeo: {short.data.madeWith.voice} {short.data.madeWith.images}</p>}
     </aside>
   </article>

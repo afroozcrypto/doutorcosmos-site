@@ -47,6 +47,8 @@ const posts = defineCollection({
     licence: z.enum(POST_LICENCE_KEYS as [string, ...string[]]),
     credit: z.string().optional(),
     madeWith: z.string(),
+    // Data da revisão humana. Sem ela o post não pode ser publicado.
+    reviewed: z.coerce.date().optional(),
     draft: z.boolean().default(false),
   }),
 });

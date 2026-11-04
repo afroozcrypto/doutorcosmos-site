@@ -5,7 +5,8 @@ pubDate: 2026-11-04
 shortId: perseus-som-buraco-negro
 licence: original
 madeWith: "Texto escrito com IA (Claude) a partir das fontes A e B. Revisão humana: pendente."
-draft: false
+# reviewed: AAAA-MM-DD (preencher depois de rever factos, título e descrição)
+draft: true
 ---
 
 ## O que sabemos

@@ -58,6 +58,8 @@ for (const p of posts) {
   if (typeof d.description === 'string' && d.description.length > 160) errors.push(`${where}: description com mais de 160 caracteres`);
   if (d.licence && d.licence !== 'original' && !d.credit) errors.push(`${where}: adaptação sem credit`);
 
+  if (d.draft !== true && !d.reviewed) errors.push(`${where}: publicado sem revisão humana (campo reviewed)`);
+
   const short = d.shortId ? shortBySlug.get(d.shortId) : null;
   if (d.shortId && !short) errors.push(`${where}: shortId "${d.shortId}" não existe`);
   if (short && d.draft !== true && short.data.draft === true) errors.push(`${where}: post publicado liga a um Short em rascunho`);
