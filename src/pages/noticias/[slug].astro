@@ -2,7 +2,7 @@
 import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import JsonLd from '../../components/JsonLd.astro';
-import { publishedPosts, publishedShorts, fmtDate, SITE, type Post } from '../../lib/site';
+import { publishedPosts, publishedShorts, fmtDate, SITE, type Post, href } from '../../lib/site';
 import { POST_LICENCES } from '../../lib/licences.mjs';
 
 export async function getStaticPaths() {
@@ -35,7 +35,7 @@ const ld = [
 ---
 <Base title={post.data.title} description={post.data.description} ogType="article">
   <JsonLd slot="head" data={ld} />
-  <nav aria-label="Caminho" class="crumbs small"><a href="/">Início</a> › <a href="/noticias/">Notícias</a></nav>
+  <nav aria-label="Caminho" class="crumbs small"><a href={href('/')}>Início</a> › <a href={href('/noticias/')}>Notícias</a></nav>
   <article class="prose">
     <h1>{post.data.title}</h1>
     <p class="small muted">
@@ -45,7 +45,7 @@ const ld = [
     <Content />
     <aside class="card meta">
       <h2>Fontes e licença</h2>
-      {short && <p>Fontes, créditos e nível de confiança: <a href={`/fontes/${short.id}/`}>ficha do vídeo</a>.</p>}
+      {short && <p>Fontes, créditos e nível de confiança: <a href={href(`/fontes/${short.id}/`)}>ficha do vídeo</a>.</p>}
       <p>Licença do texto: {lic.url ? <a href={lic.url} rel="license noopener">{lic.label}</a> : lic.label}.</p>
       {post.data.credit && <p>{post.data.credit}</p>}
       <h2>Como foi feito</h2>

@@ -1,0 +1,26 @@
+---
+import { href, CONFIDENCE_LABEL, type Short } from '../lib/site';
+const { short, level = 3 } = Astro.props as { short: Short; level?: 2 | 3 };
+const H = level === 2 ? 'h2' : 'h3';
+const d = short.data;
+---
+<article class="card short">
+  <H class="t"><a href={href(`/fontes/${short.id}/`)}>{d.title}</a></H>
+  <dl class="spec">
+    <div><dt>Objeto</dt><dd>{d.object}</dd></div>
+    <div><dt>Instrumento</dt><dd>{d.instrument}</dd></div>
+    <div><dt>Confiança</dt><dd><span class={`tag tag-${d.confidence}`}>{CONFIDENCE_LABEL[d.confidence]}</span></dd></div>
+  </dl>
+  <p class="small muted">{d.description}</p>
+</article>
+<style>
+  .short .t { font-size: var(--t-lg); margin-top: 0; }
+  .short .t a { color: var(--c-text); text-decoration: none; }
+  .short .t a::after { content: ''; position: absolute; inset: 0; border-radius: var(--r-2); }
+  .short { position: relative; transition: border-color .2s; }
+  .short:hover, .short:focus-within { border-color: var(--c-accent-2); }
+  .spec { display: grid; gap: var(--s-1); margin: 0 0 var(--s-3); }
+  .spec div { display: grid; grid-template-columns: 7.5rem 1fr; gap: var(--s-2); }
+  dt { font: 600 var(--t-sm)/1.6 var(--f-mono); color: var(--c-muted); text-transform: uppercase; letter-spacing: .04em; }
+  dd { margin: 0; font-size: var(--t-sm); }
+</style>

@@ -5,6 +5,17 @@ description: "As ondas de pressão do buraco negro do enxame de Perseu, detetada
 # uploadDate: TODO (YouTube Studio > Conteúdo > Data)
 durationSec: 35
 thumbnail: "https://i.ytimg.com/vi/xJpeXpov6x8/hq2.jpg"
+object: "Enxame de galáxias de Perseu"
+instrument: "Chandra, raios X"
+facts:
+  - value: "57 oitavas"
+    label: "abaixo do dó central: a nota original"
+  - value: "57 e 58"
+    label: "oitavas que a NASA subiu para a ouvirmos"
+  - value: "144 mil biliões"
+    label: "de vezes mais aguda do que a original"
+  - value: "2003"
+    label: "ano em que o Chandra revelou as ondas"
 sources:
   - role: A
     name: "Chandra X-ray Center, A Universe of Sound: Perseus Cluster Sonification"

@@ -23,4 +23,4 @@ O que ouves no vídeo é uma tradução de dados, não o som que um ouvido capta
 
 Não encontrámos alterações nas fontes A e B até 4 de novembro de 2026.
 
-A ficha completa do vídeo, com créditos e fontes, está em [/fontes/perseus-som-buraco-negro/](/fontes/perseus-som-buraco-negro/).
+Ver a [ficha do vídeo](../../fontes/perseus-som-buraco-negro/), com fontes, créditos e nível de confiança.

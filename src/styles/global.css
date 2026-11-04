@@ -5,10 +5,17 @@ body {
   margin: 0; min-height: 100vh;
   font: 400 var(--t-base)/1.65 var(--f-sans);
   color: var(--c-text);
-  background:
-    radial-gradient(1200px 600px at 80% -10%, #1b2a6b55, transparent 60%),
-    radial-gradient(900px 500px at -10% 10%, #3a1b6b44, transparent 60%),
-    var(--c-bg);
+  background-color: var(--c-bg);
+  background-image:
+    radial-gradient(1px 1px at 12% 18%, #ffffffb0 50%, transparent 51%),
+    radial-gradient(1px 1px at 68% 8%, #ffffff90 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 85% 32%, #ffffffa0 50%, transparent 51%),
+    radial-gradient(1px 1px at 33% 62%, #ffffff80 50%, transparent 51%),
+    radial-gradient(1px 1px at 92% 74%, #ffffff90 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 6% 88%, #ffffff80 50%, transparent 51%),
+    radial-gradient(1200px 600px at 80% -10%, #1b2a6b66, transparent 60%),
+    radial-gradient(900px 500px at -10% 10%, #3a1b6b44, transparent 60%);
+  background-size: 640px 640px, 640px 640px, 640px 640px, 640px 640px, 640px 640px, 640px 640px, auto, auto;
 }
 h1, h2, h3 { line-height: 1.2; margin: 0 0 var(--s-3); text-wrap: balance; }
 h1 { font-size: var(--t-2xl); letter-spacing: -.02em; }
@@ -23,6 +30,7 @@ img, svg, iframe { max-width: 100%; display: block; }
 .wrap { width: min(100% - 2rem, var(--w-page)); margin-inline: auto; }
 .prose { max-width: var(--w-text); }
 .muted { color: var(--c-muted); }
+.eyebrow { font: 600 var(--t-sm)/1.4 var(--f-mono); text-transform: uppercase; letter-spacing: .08em; color: var(--c-accent-2); margin-bottom: var(--s-3); }
 .small { font-size: var(--t-sm); }
 .card { background: var(--c-surface); border: 1px solid var(--c-line); border-radius: var(--r-2); padding: var(--s-5); }
 .grid { display: grid; gap: var(--s-4); }

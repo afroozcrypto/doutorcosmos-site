@@ -1,6 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { publishedPosts, fmtDate } from '../../lib/site';
+import { publishedPosts, fmtDate, href } from '../../lib/site';
 const posts = await publishedPosts();
 ---
 <Base title="Notícias" description="Análises curtas de astrofísica: o que sabemos, o que não sabemos e o que mudou desde cada vídeo.">
@@ -10,7 +10,7 @@ const posts = await publishedPosts();
     <ul class="list">
       {posts.map((p) => (
         <li>
-          <h2><a href={`/noticias/${p.id}/`}>{p.data.title}</a></h2>
+          <h2><a href={href(`/noticias/${p.id}/`)}>{p.data.title}</a></h2>
           <p class="small muted"><time datetime={p.data.pubDate.toISOString()}>{fmtDate(p.data.pubDate)}</time></p>
           <p>{p.data.description}</p>
         </li>

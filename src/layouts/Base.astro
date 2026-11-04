@@ -1,10 +1,10 @@
 ---
 import '../styles/global.css';
-import { SITE, IS_PREVIEW } from '../lib/site';
+import { SITE, IS_PREVIEW, href } from '../lib/site';
 interface Props { title: string; description: string; ogType?: 'website' | 'article'; }
 const { title, description, ogType = 'website' } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
-const ogImage = new URL('/og.png', Astro.site).href;
+const ogImage = new URL(href('/og.png'), Astro.site).href;
 const fullTitle = Astro.url.pathname === '/' ? title : `${title} · ${SITE.name}`;
 const nav = [
   ['/noticias/', 'Notícias'], ['/fontes/', 'Fontes'], ['/sessoes/', 'Sessões'], ['/como-verificamos/', 'Como verificamos'],
@@ -20,9 +20,9 @@ const here = Astro.url.pathname;
     <meta name="description" content={description} />
     {IS_PREVIEW && <meta name="robots" content="noindex, nofollow" />}
     <link rel="canonical" href={canonical} />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="alternate" type="application/rss+xml" title="Doutor Cosmos: notícias" href="/rss.xml" />
-    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="icon" href={href('/favicon.svg')} type="image/svg+xml" />
+    <link rel="alternate" type="application/rss+xml" title="Doutor Cosmos: notícias" href={href('/rss.xml')} />
+    <link rel="sitemap" href={href('/sitemap-index.xml')} />
     <meta name="theme-color" content="#070b17" />
     <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content={SITE.name} />
@@ -41,10 +41,10 @@ const here = Astro.url.pathname;
     <a class="skip" href="#conteudo">Saltar para o conteúdo</a>
     <header class="top">
       <div class="wrap bar">
-        <a class="brand" href="/">Doutor Cosmos</a>
+        <a class="brand" href={href('/')}>Doutor Cosmos</a>
         <nav aria-label="Principal">
           <ul>
-            {nav.map(([href, label]) => <li><a href={href} aria-current={here.startsWith(href) ? 'page' : undefined}>{label}</a></li>)}
+            {nav.map(([path, label]) => <li><a href={href(path)} aria-current={here.startsWith(href(path)) ? 'page' : undefined}>{label}</a></li>)}
           </ul>
         </nav>
       </div>
@@ -54,7 +54,7 @@ const here = Astro.url.pathname;
     </main>
     <footer class="foot">
       <div class="wrap small">
-        <p><a href="/sobre/">Sobre</a> · <a href="/correcoes/">Correções</a> · <a href="/rss.xml">RSS</a> · <a href={SITE.channel} rel="noopener">Canal no YouTube</a></p>
+        <p><a href={href('/sobre/')}>Sobre</a> · <a href={href('/correcoes/')}>Correções</a> · <a href={href('/rss.xml')}>RSS</a> · <a href={SITE.channel} rel="noopener">Canal no YouTube</a></p>
         <p class="muted">O Doutor Cosmos é uma personagem criada com IA. Contacto: <a href={`mailto:${SITE.email}`}>{SITE.email}</a></p>
         <p class="muted">As referências à NASA, à ESA e a outras agências identificam fontes. Não implicam apoio dessas entidades.</p>
       </div>

@@ -22,6 +22,11 @@ const shorts = defineCollection({
     uploadDate: z.string().datetime({ offset: true }).optional(),
     durationSec: z.number().int().positive().optional(),
     thumbnail: z.string().url().startsWith('https://'),
+    // Campos iguais em todos os cartões, pela mesma ordem.
+    object: z.string(),
+    instrument: z.string(),
+    // Factos em números, todos presentes nas fontes A ou B.
+    facts: z.array(z.object({ value: z.string(), label: z.string() })).max(4).default([]),
     sources: z.array(source).min(1),
     sourceBNotFound: z.boolean().default(false),
     confidence: z.enum(['verificado', 'plausivel', 'especulativo']),

@@ -23,4 +23,4 @@ A chuva de vidro não foi vista. É uma inferência: partículas de silicatos, q
 
 A descrição do vídeo foi corrigida a 26 de outubro de 2026 para cerca de 7000 km/h, com a fonte ESA/Hubble. Observações mais recentes deste planeta: por verificar.
 
-A ficha do vídeo está em [/fontes/hd189733b-chuva-de-vidro/](/fontes/hd189733b-chuva-de-vidro/).
+Ver a [ficha do vídeo](../../fontes/hd189733b-chuva-de-vidro/), com fontes, créditos e nível de confiança.

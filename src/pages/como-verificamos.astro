@@ -1,4 +1,5 @@
 ---
+import { href } from '../lib/site';
 import Base from '../layouts/Base.astro';
 import { LICENCES } from '../lib/licences.mjs';
 const rows = Object.entries(LICENCES);
@@ -23,7 +24,7 @@ const rows = Object.entries(LICENCES);
     </ul>
     <p>Não usamos logótipos de agências nem sugerimos que nos apoiam.</p>
     <h2>Correções</h2>
-    <p>Quando erramos, corrigimos a descrição do vídeo e registamos a mudança em <a href="/correcoes/">Correções</a>.</p>
+    <p>Quando erramos, corrigimos a descrição do vídeo e registamos a mudança em <a href={href('/correcoes/')}>Correções</a>.</p>
   </div>
 </Base>
 <style>.prose li { margin-bottom: var(--s-2); }</style>

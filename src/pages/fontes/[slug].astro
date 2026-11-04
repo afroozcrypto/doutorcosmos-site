@@ -4,7 +4,8 @@ import Base from '../../layouts/Base.astro';
 import JsonLd from '../../components/JsonLd.astro';
 import VideoEmbed from '../../components/VideoEmbed.astro';
 import SourceList from '../../components/SourceList.astro';
-import { publishedShorts, publishedPosts, fmtDate, isoDuration, CONFIDENCE_LABEL, SITE, type Short } from '../../lib/site';
+import Facts from '../../components/Facts.astro';
+import { publishedShorts, publishedPosts, fmtDate, isoDuration, CONFIDENCE_LABEL, SITE, type Short, href } from '../../lib/site';
 
 export async function getStaticPaths() {
   const shorts = await publishedShorts();
@@ -26,18 +27,23 @@ const ld = d.uploadDate ? {
 ---
 <Base title={`Fontes: ${d.title}`} description={d.description}>
   {ld && <JsonLd slot="head" data={ld} />}
-  <nav aria-label="Caminho" class="crumbs small"><a href="/">Início</a> › <a href="/fontes/">Fontes</a></nav>
+  <nav aria-label="Caminho" class="crumbs small"><a href={href('/')}>Início</a> › <a href={href('/fontes/')}>Fontes</a></nav>
   <h1>{d.title}</h1>
   <div class="layout">
     <VideoEmbed id={d.youtubeId} title={d.title} />
     <div class="prose">
       <p class="muted">{d.description}</p>
-      <p>Confiança: <span class={`tag tag-${d.confidence}`}>{CONFIDENCE_LABEL[d.confidence]}</span> <a class="small" href="/como-verificamos/">o que isto quer dizer</a></p>
+      <p>Confiança: <span class={`tag tag-${d.confidence}`}>{CONFIDENCE_LABEL[d.confidence]}</span> <a class="small" href={href('/como-verificamos/')}>o que isto quer dizer</a></p>
+      <dl class="spec">
+        <div><dt>Objeto</dt><dd>{d.object}</dd></div>
+        <div><dt>Instrumento</dt><dd>{d.instrument}</dd></div>
+      </dl>
       <p class="small muted">
         {d.uploadDate ? <>Publicado a <time datetime={d.uploadDate}>{fmtDate(new Date(d.uploadDate))}</time></> : 'Data de publicação por confirmar'}
         {d.durationSec && <> · {d.durationSec} s</>}
       </p>
 
+      <Facts facts={d.facts} source="fontes A e B abaixo" />
       <h2>Fontes</h2>
       <SourceList sources={d.sources} />
       {d.sourceBNotFound && <p class="small muted">Fonte B ainda não confirmada. Motivo abaixo.</p>}
@@ -58,7 +64,7 @@ const ld = d.uploadDate ? {
 
       {posts.length > 0 && (<>
         <h2>Análise</h2>
-        <ul>{posts.map((p) => <li><a href={`/noticias/${p.id}/`}>{p.data.title}</a></li>)}</ul>
+        <ul>{posts.map((p) => <li><a href={href(`/noticias/${p.id}/`)}>{p.data.title}</a></li>)}</ul>
       </>)}
     </div>
   </div>
@@ -67,5 +73,9 @@ const ld = d.uploadDate ? {
   .crumbs { margin-bottom: var(--s-4); color: var(--c-muted); }
   .layout { display: grid; gap: var(--s-6); align-items: start; }
   @media (min-width: 56rem) { .layout { grid-template-columns: 360px 1fr; } }
+  .spec { display: grid; gap: var(--s-1); margin: 0 0 var(--s-3); }
+  .spec div { display: grid; grid-template-columns: 7.5rem 1fr; gap: var(--s-2); }
+  .spec dt { font: 600 var(--t-sm)/1.6 var(--f-mono); color: var(--c-muted); text-transform: uppercase; letter-spacing: .04em; }
+  .spec dd { margin: 0; }
   .layout h2:first-of-type { margin-top: var(--s-5); }
 </style>

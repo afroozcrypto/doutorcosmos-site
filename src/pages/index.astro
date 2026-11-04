@@ -2,44 +2,60 @@
 import Base from '../layouts/Base.astro';
 import JsonLd from '../components/JsonLd.astro';
 import VideoEmbed from '../components/VideoEmbed.astro';
-import { SITE, publishedShorts, publishedPosts, fmtDate } from '../lib/site';
-const [latest] = await publishedShorts();
+import Ripples from '../components/Ripples.astro';
+import Facts from '../components/Facts.astro';
+import ShortCard from '../components/ShortCard.astro';
+import { SITE, publishedShorts, publishedPosts, fmtDate, href } from '../lib/site';
+const shorts = await publishedShorts();
+const [latest] = shorts;
 const posts = (await publishedPosts()).slice(0, 3);
-const site = Astro.site!.href;
+const site = new URL(href('/'), Astro.site).href;
 const ld = [
   { '@type': 'WebSite', name: SITE.name, url: site, inLanguage: 'pt-PT' },
-  { '@type': 'Organization', name: SITE.name, url: site, email: SITE.email, sameAs: [SITE.channel], logo: new URL('/og.png', site).href },
+  { '@type': 'Organization', name: SITE.name, url: site, email: SITE.email, sameAs: [SITE.channel], logo: new URL(href('/og.png'), Astro.site).href },
 ];
+const firstA = latest?.data.sources.find((s) => s.role === 'A');
 ---
 <Base title="Doutor Cosmos: o universo em 30 segundos, com fontes" description="Astrofísica em português de Portugal em vídeos curtos. Cada vídeo tem fonte primária, nível de confiança e correções públicas.">
   <JsonLd slot="head" data={ld} />
+
   <section class="hero">
-    <h1>O universo em 30 segundos. Com fontes.</h1>
-    <p class="lead">{SITE.heroLead}</p>
-    <p><a class="btn" href="/sessoes/">Levar o Universo à sua escola ou biblioteca</a></p>
+    <Ripples />
+    <div class="hero-text">
+      <p class="eyebrow">Astrofísica em PT-PT · fonte em cada vídeo</p>
+      <h1>O universo em 30 segundos. <span>Com fontes.</span></h1>
+      <p class="lead">{SITE.heroLead}</p>
+      <div class="actions">
+        <a class="btn" href={href('/sessoes/')}>Levar o Universo à sua escola ou biblioteca</a>
+        <a class="more" href={href('/fontes/')}>Ver as fontes dos vídeos →</a>
+      </div>
+      <p class="small muted note">As ondas no fundo imitam as ondulações que o Chandra viu no gás do enxame de Perseu.</p>
+    </div>
   </section>
 
   {latest && (
-    <section aria-labelledby="ultimo">
-      <h2 id="ultimo">Último vídeo</h2>
+    <section aria-labelledby="ultimo" class="block">
+      <p class="eyebrow">Último vídeo</p>
+      <h2 id="ultimo">{latest.data.title}</h2>
       <div class="latest">
         <VideoEmbed id={latest.data.youtubeId} title={latest.data.title} />
         <div>
-          <h3>{latest.data.title}</h3>
           <p class="muted">{latest.data.description}</p>
-          <p><a href={`/fontes/${latest.id}/`}>Ver fontes, créditos e nível de confiança</a></p>
+          <Facts facts={latest.data.facts} source={firstA?.name} sourceUrl={firstA?.url} />
+          <p><a href={href(`/fontes/${latest.id}/`)}>Ficha completa: fontes A e B, créditos e confiança →</a></p>
         </div>
       </div>
     </section>
   )}
 
-  <section aria-labelledby="noticias">
-    <h2 id="noticias">Notícias</h2>
-    {posts.length === 0 ? <p class="muted">Ainda sem notícias publicadas.</p> : (
+  <section aria-labelledby="noticias" class="block">
+    <p class="eyebrow">Notícias</p>
+    <h2 id="noticias">O que sabemos, o que não sabemos e o que mudou</h2>
+    {posts.length === 0 ? <p class="muted">As primeiras notícias estão em revisão. Cada uma é lida por uma pessoa antes de sair.</p> : (
       <ul class="grid grid-3 list">
         {posts.map((p) => (
           <li class="card">
-            <h3><a href={`/noticias/${p.id}/`}>{p.data.title}</a></h3>
+            <h3><a href={href(`/noticias/${p.id}/`)}>{p.data.title}</a></h3>
             <p class="small muted"><time datetime={p.data.pubDate.toISOString()}>{fmtDate(p.data.pubDate)}</time></p>
             <p class="small">{p.data.description}</p>
           </li>
@@ -48,26 +64,56 @@ const ld = [
     )}
   </section>
 
-  <section aria-labelledby="verificar" class="prose">
+  {shorts.length > 0 && (
+    <section aria-labelledby="fichas" class="block">
+      <p class="eyebrow">Fichas dos vídeos</p>
+      <h2 id="fichas">Cada vídeo, os mesmos campos</h2>
+      <div class="grid grid-3">{shorts.map((s) => <ShortCard short={s} />)}</div>
+    </section>
+  )}
+
+  <section aria-labelledby="verificar" class="block">
+    <p class="eyebrow">Método</p>
     <h2 id="verificar">Como verificamos</h2>
-    <p><strong>Fonte primária.</strong> NASA, ESA, CERN, arXiv e revistas científicas. Cada vídeo cita a fonte na descrição.</p>
-    <p><strong>Níveis de confiança.</strong> Distinguimos o que está verificado, o que é plausível e o que é especulação. Nunca vendemos hipóteses como factos.</p>
-    <p><a href="/como-verificamos/">Ler o método completo</a></p>
+    <ol class="steps">
+      <li><span class="n" aria-hidden="true">1</span><div><strong>Fonte primária.</strong> NASA, ESA, CERN, arXiv e revistas científicas. Cada vídeo cita a fonte na descrição.</div></li>
+      <li><span class="n" aria-hidden="true">2</span><div><strong>Níveis de confiança.</strong> Distinguimos o que está verificado, o que é plausível e o que é especulação. Nunca vendemos hipóteses como factos.</div></li>
+      <li><span class="n" aria-hidden="true">3</span><div><strong>Correções públicas.</strong> Quando erramos, fica registado em <a href={href('/correcoes/')}>Correções</a>.</div></li>
+    </ol>
+    <p><a href={href('/como-verificamos/')}>Ler o método completo →</a></p>
   </section>
 
-  <section class="cta card">
-    <h2>Ouve o Universo</h2>
+  <section class="cta card block" aria-labelledby="sessoes">
+    <div class="bars" aria-hidden="true">{Array.from({ length: 24 }, (_, i) => <span style={`--i:${i}`}></span>)}</div>
+    <p class="eyebrow">Sessões ao vivo</p>
+    <h2 id="sessoes">Ouve o Universo</h2>
     <p>Sessão ao vivo de escuta guiada, 45 minutos: dados reais de telescópios da NASA, traduzidos em som.</p>
-    <a class="btn" href="/sessoes/">Saber mais sobre as sessões</a>
+    <a class="btn" href={href('/sessoes/')}>Saber mais sobre as sessões</a>
   </section>
 </Base>
 <style>
-  .hero { padding: var(--s-6) 0 var(--s-4); }
-  .lead { font-size: var(--t-lg); color: var(--c-muted); max-width: var(--w-text); }
+  .hero { position: relative; isolation: isolate; padding: var(--s-7) 0 var(--s-6); min-height: min(78vh, 40rem); display: flex; align-items: center; }
+  .hero-text { position: relative; z-index: 1; max-width: 44rem; }
+  .hero h1 { font-size: clamp(2.4rem, 9vw, 4.25rem); letter-spacing: -.03em; }
+  .hero h1 span { color: var(--c-accent); }
+  .lead { font-size: var(--t-lg); color: var(--c-muted); max-width: 38rem; }
+  .actions { display: flex; flex-wrap: wrap; gap: var(--s-3) var(--s-5); align-items: center; margin: var(--s-5) 0 var(--s-4); }
+  .more { font-weight: 700; display: inline-block; padding: var(--s-2) 0; }
+  .note { max-width: 30rem; }
+  .block { margin-top: var(--s-8); }
+  .block h2 { margin-top: 0; }
   .latest { display: grid; gap: var(--s-5); align-items: start; }
-  @media (min-width: 48rem) { .latest { grid-template-columns: 360px 1fr; } }
+  @media (min-width: 56rem) { .latest { grid-template-columns: 340px 1fr; } }
   .list { list-style: none; padding: 0; margin: 0; }
   .list h3 a { color: var(--c-text); }
-  .cta { margin-top: var(--s-7); }
-  .cta h2 { margin-top: 0; }
+  .steps { list-style: none; padding: 0; margin: 0 0 var(--s-4); display: grid; gap: var(--s-4); max-width: var(--w-text); }
+  .steps li { display: flex; gap: var(--s-4); align-items: flex-start; }
+  .n { flex: none; width: 2.4rem; height: 2.4rem; border-radius: 50%; display: grid; place-items: center; font: 700 1rem var(--f-mono); color: var(--c-bg); background: var(--c-accent-2); }
+  .cta { position: relative; overflow: hidden; }
+  .bars { display: flex; gap: 4px; align-items: flex-end; height: 48px; margin-bottom: var(--s-4); }
+  .bars span { width: 6px; border-radius: 3px; background: linear-gradient(var(--c-accent), var(--c-accent-2)); height: calc(20% + (var(--i) * 37 % 80) * 1%); animation: som 1.6s ease-in-out infinite alternate; animation-delay: calc(var(--i) * -0.13s); }
+  @keyframes som { from { transform: scaleY(.35); } to { transform: scaleY(1); } }
+  .bars span { transform-origin: bottom; will-change: transform; }
+  .bars { contain: layout paint; }
+  @media (prefers-reduced-motion: reduce) { .bars span { animation: none; } }
 </style>

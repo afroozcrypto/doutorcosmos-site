@@ -1,0 +1,21 @@
+---
+interface Props { facts: { value: string; label: string }[]; source?: string; sourceUrl?: string; }
+const { facts, source, sourceUrl } = Astro.props;
+---
+{facts.length > 0 && (
+  <figure class="facts">
+    <dl>
+      {facts.map((f) => <div><dt>{f.label}</dt><dd>{f.value}</dd></div>)}
+    </dl>
+    {source && <figcaption class="small muted">Fonte: {sourceUrl ? <a href={sourceUrl} rel="noopener">{source}</a> : source}</figcaption>}
+  </figure>
+)}
+<style>
+  .facts { margin: var(--s-5) 0; }
+  dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; margin: 0; background: var(--c-line); border: 1px solid var(--c-line); border-radius: var(--r-2); overflow: hidden; }
+  @media (min-width: 48rem) { dl { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  dl div { background: var(--c-bg-2); padding: var(--s-4); display: flex; flex-direction: column-reverse; justify-content: flex-end; gap: var(--s-1); }
+  dd { margin: 0; font: 700 clamp(1.35rem, 4.5vw, 1.9rem)/1.1 var(--f-sans); color: var(--c-accent); letter-spacing: -.01em; }
+  dt { font-size: var(--t-sm); color: var(--c-muted); }
+  figcaption { margin-top: var(--s-2); }
+</style>

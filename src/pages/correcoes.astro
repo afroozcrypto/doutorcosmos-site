@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import { publishedShorts, fmtDate } from '../lib/site';
+import { publishedShorts, fmtDate, href } from '../lib/site';
 const items = (await publishedShorts())
   .flatMap((s) => s.data.corrections.map((c) => ({ ...c, short: s })))
   .sort((a, b) => b.date.valueOf() - a.date.valueOf());
@@ -13,7 +13,7 @@ const items = (await publishedShorts())
       <ul class="list">
         {items.map((c) => (
           <li>
-            <p class="small muted"><time datetime={c.date.toISOString()}>{fmtDate(c.date)}</time> · <a href={`/fontes/${c.short.id}/`}>{c.short.data.title}</a></p>
+            <p class="small muted"><time datetime={c.date.toISOString()}>{fmtDate(c.date)}</time> · <a href={href(`/fontes/${c.short.id}/`)}>{c.short.data.title}</a></p>
             <p><strong>Antes:</strong> {c.before}</p>
             <p><strong>Agora:</strong> {c.after} <a href={c.source} rel="noopener">Fonte</a></p>
           </li>

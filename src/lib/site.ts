@@ -6,6 +6,8 @@ export const SITE = {
   channel: 'https://www.youtube.com/@DoutorCosmosOfficial',
   heroLead: 'Astrofísica em português de Portugal. Dados da NASA, ESA e CERN, fonte em cada vídeo, e correções públicas quando erramos.',
 };
+// Prefixa o base (ex.: /doutorcosmos-site) a caminhos internos.
+export const href = (path: string) => `${import.meta.env.BASE_URL.replace(/\/$/, '')}${path}`;
 export const IS_PREVIEW = import.meta.env.PUBLIC_ENV === 'preview';
 
 // Rascunhos ficam fora de rotas, sitemap e RSS.

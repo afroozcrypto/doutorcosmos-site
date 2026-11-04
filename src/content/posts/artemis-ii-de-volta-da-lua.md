@@ -22,4 +22,4 @@ A Artemis II não pousou na Lua. Foi um voo de teste à volta dela. O que esta m
 
 A 7 de maio de 2026 a NASA atualizou o comunicado com o número oficial de milhas voadas: 695 081 no total, cerca de 1 118 624 km. As 252 756 milhas são a distância máxima à Terra, não a viagem completa. Outras fontes publicaram totais diferentes antes desta revisão.
 
-A ficha do vídeo está em [/fontes/artemis-ii-lua/](/fontes/artemis-ii-lua/).
+Ver a [ficha do vídeo](../../fontes/artemis-ii-lua/), com fontes, créditos e nível de confiança.

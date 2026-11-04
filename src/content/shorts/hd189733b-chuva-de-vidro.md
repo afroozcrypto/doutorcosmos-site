@@ -5,6 +5,17 @@ description: "HD 189733b: o primeiro exoplaneta com a cor visível medida, pelo 
 # uploadDate: TODO
 # durationSec: TODO
 thumbnail: "https://i.ytimg.com/vi/nb4DKyH_JTU/hq2.jpg"
+object: "Exoplaneta HD 189733b"
+instrument: "Hubble, espectrógrafo STIS"
+facts:
+  - value: "63 anos-luz"
+    label: "distância à Terra"
+  - value: "+1000 °C"
+    label: "temperatura da atmosfera"
+  - value: "~7000 km/h"
+    label: "ventos descritos pela ESA/Hubble"
+  - value: "2013"
+    label: "primeira cor medida de um exoplaneta"
 sources:
   - role: A
     name: "ESA/Hubble heic1312, Hubble spots azure blue planet (11-7-2013)"

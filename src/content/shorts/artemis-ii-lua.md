@@ -5,6 +5,17 @@ description: "Artemis II: quatro astronautas à volta da Lua e de volta, de 1 a 
 # uploadDate: TODO
 # durationSec: TODO
 thumbnail: "https://i.ytimg.com/vi/tu0-kWbnVs0/hq2.jpg"
+object: "Lua, missão tripulada"
+instrument: "Orion e SLS"
+facts:
+  - value: "4"
+    label: "astronautas a bordo"
+  - value: "406 771 km"
+    label: "distância máxima à Terra, recorde"
+  - value: "10 dias"
+    label: "de 1 a 10 de abril de 2026"
+  - value: "1 118 624 km"
+    label: "percorridos no total (NASA, 7-5-2026)"
 sources:
   - role: A
     name: "NASA, NASA Welcomes Record-Setting Artemis II Moonfarers Back to Earth (10-4-2026, atualizado a 7-5-2026)"
