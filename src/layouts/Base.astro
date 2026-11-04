@@ -1,8 +1,8 @@
 ---
 import '../styles/global.css';
 import { SITE, IS_PREVIEW, href } from '../lib/site';
-interface Props { title: string; description: string; ogType?: 'website' | 'article'; }
-const { title, description, ogType = 'website' } = Astro.props;
+interface Props { title: string; description: string; ogType?: 'website' | 'article'; noindex?: boolean; }
+const { title, description, ogType = 'website', noindex = false } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const ogImage = new URL(href('/og.png'), Astro.site).href;
 const fullTitle = Astro.url.pathname === '/' ? title : `${title} · ${SITE.name}`;
@@ -18,7 +18,7 @@ const here = Astro.url.pathname;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
-    {IS_PREVIEW && <meta name="robots" content="noindex, nofollow" />}
+    {(IS_PREVIEW || noindex) && <meta name="robots" content="noindex, nofollow" />}
     <link rel="canonical" href={canonical} />
     <link rel="icon" href={href('/favicon.svg')} type="image/svg+xml" />
     <link rel="alternate" type="application/rss+xml" title="Doutor Cosmos: notícias" href={href('/rss.xml')} />

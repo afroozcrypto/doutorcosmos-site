@@ -8,5 +8,6 @@ export default defineConfig({
   base: process.env.BASE_PATH ?? '/',
   trailingSlash: 'always',
   build: { inlineStylesheets: 'always' },
-  integrations: [sitemap()],
+  // Rascunhos com noindex ficam fora do sitemap.
+  integrations: [sitemap({ filter: (page) => !page.includes('/ouve-o-universo/') })],
 });

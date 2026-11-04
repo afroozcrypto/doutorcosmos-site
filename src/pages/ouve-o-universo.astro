@@ -1,0 +1,97 @@
+---
+// RASCUNHO. Factos de claude/guiao-sessao-adultos-v5-2026-11-03.md e das indicações do Conde (2026-11-04).
+// Tudo o que não tem fonte está marcado [por confirmar]. Fora do sitemap e com noindex até ser revisto.
+import Base from '../layouts/Base.astro';
+import { SITE } from '../lib/site';
+const mail = `mailto:${SITE.email}?subject=${encodeURIComponent('Ouve o Universo: escola, museu ou evento')}`;
+const TBC = '[por confirmar]';
+const pieces = [
+  {
+    name: 'HD 31901', sec: 46,
+    measured: 'O brilho da estrela, medido pelo TESS durante 27 dias.',
+    translated: 'As variações de brilho, aceleradas cerca de 54 000 vezes, passam a som.',
+    chosen: TBC,
+    credit: "NASA's Goddard Space Flight Center e Simon Murphy, University of Sydney",
+    source: 'https://svs.gsfc.nasa.gov/13605/',
+  },
+  {
+    name: 'Cassiopeia A', sec: 21,
+    measured: TBC, translated: TBC, chosen: TBC,
+    credit: 'NASA/CXC/SAO/K.Arcand, SYSTEM Sounds (M. Russo, A. Santaguida)',
+    source: null,
+  },
+  {
+    name: 'Centro Galáctico', sec: 64,
+    measured: TBC, translated: TBC, chosen: TBC,
+    credit: 'NASA/CXC/SAO/K.Arcand, SYSTEM Sounds (M. Russo, A. Santaguida)',
+    source: null,
+  },
+  {
+    name: 'Aglomerado de Perseu', sec: 34,
+    measured: 'Ondas de pressão reais no gás do enxame, medidas pelo Chandra. É a exceção: aqui o gás transporta mesmo ondas, como o ar transporta o som.',
+    translated: 'As ondas foram subidas 57 e 58 oitavas, até ao ouvido humano.',
+    chosen: 'As ondas foram extraídas a partir do centro, em várias direções, e são tocadas numa varredura circular sobre a imagem.',
+    credit: 'NASA/CXC/SAO/K.Arcand, SYSTEM Sounds (M. Russo, A. Santaguida)',
+    source: 'https://chandra.si.edu/sound/perseus.html',
+  },
+];
+const totalSec = pieces.reduce((t, p) => t + p.sec, 0);
+---
+<Base title="Ouve o Universo: para escolas, museus e eventos" description="Ouve o Universo: sessão ao vivo de 45 minutos com quatro sonificações de dados da NASA. Em preparação." noindex>
+  <div class="prose">
+    <p class="eyebrow">Em preparação · rascunho</p>
+    <h1>Ouve o Universo</h1>
+    <p class="lead">Sessão ao vivo de 45 minutos para escolas, museus e eventos: quatro sonificações de dados da NASA, ouvidas e explicadas.</p>
+    <p class="status small">Esta sessão está em preparação. Ainda não foi revista por um astrónomo.</p>
+
+    <h2>Como funciona cada som</h2>
+    <p>Para cada sonificação explico três coisas: o que foi medido, o que foi traduzido em som e o que foi escolhido por quem a fez.</p>
+
+    <ol class="pieces">
+      {pieces.map((p) => (
+        <li class="card">
+          <h3>{p.name} <span class="dur">{p.sec} s</span></h3>
+          <dl>
+            <div><dt>Medido</dt><dd>{p.measured}</dd></div>
+            <div><dt>Traduzido</dt><dd>{p.translated}</dd></div>
+            <div><dt>Escolhido</dt><dd>{p.chosen}</dd></div>
+          </dl>
+          <p class="credit">Crédito: {p.credit}{p.source ? <> · <a href={p.source} rel="noopener">fonte</a></> : <> · fonte {TBC}</>}</p>
+        </li>
+      ))}
+    </ol>
+    <p class="small muted">Som total das quatro peças: {totalSec} s. O resto dos 45 minutos é explicação e conversa.</p>
+
+    <h2>Para quem</h2>
+    <ul>
+      <li>Escolas: anos e idades {TBC}.</li>
+      <li>Museus: formato e lotação {TBC}.</li>
+      <li>Eventos: duração e espaço {TBC}.</li>
+    </ul>
+
+    <h2>O que a sala precisa</h2>
+    <p>{TBC}</p>
+
+    <h2>Quem conduz</h2>
+    <p>João Conde, criador do Doutor Cosmos. A sessão conta o que a NASA publicou e cita a fonte de cada som.</p>
+
+    <h2>Pedir informação</h2>
+    <p>Preço sob proposta. Contacto: <a href={mail}>{SITE.email}</a>.</p>
+    <p><a class="btn" href={mail}>Pedir informação por email</a></p>
+
+    <p class="small muted">O uso de material da NASA não implica apoio da NASA.</p>
+  </div>
+</Base>
+<style>
+  .lead { font-size: var(--t-lg); color: var(--c-muted); }
+  .status { border-left: 3px solid var(--c-warn); padding-left: var(--s-3); color: var(--c-warn); }
+  .pieces { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--s-4); }
+  .pieces h3 { margin: 0 0 var(--s-3); display: flex; justify-content: space-between; gap: var(--s-3); }
+  .dur { font: 600 var(--t-sm)/1.8 var(--f-mono); color: var(--c-accent); }
+  dl { display: grid; gap: var(--s-2); margin: 0 0 var(--s-3); }
+  dl div { display: grid; grid-template-columns: 6.5rem 1fr; gap: var(--s-2); }
+  dt { font: 600 var(--t-sm)/1.6 var(--f-mono); text-transform: uppercase; letter-spacing: .04em; color: var(--c-muted); }
+  dd { margin: 0; }
+  .credit { font-size: var(--t-sm); color: var(--c-muted); margin: 0; }
+  .credit a { display: inline-block; padding: .3rem 0; }
+</style>
