@@ -41,6 +41,7 @@ const here = Astro.url.pathname;
     <slot name="head" />
   </head>
   <body>
+    <div class="hud" aria-hidden="true"><div class="hud-grid"></div><div class="hud-scan"></div></div>
     <a class="skip" href="#conteudo">Saltar para o conteúdo</a>
     <header class="top">
       <div class="wrap bar">
@@ -65,7 +66,10 @@ const here = Astro.url.pathname;
   </body>
 </html>
 <style>
-  .top { border-bottom: 1px solid var(--c-line); background: #070b17cc; }
+  /* Cabeçalho em vidro. */
+  .top { border-bottom: 1px solid var(--c-line); background: #070b17e6; }
+  /* Vidro (desfoque) só em ecrãs largos: em telemóvel custava desempenho no Lighthouse. */
+  @media (min-width: 900px) { .top { background: #070b17b3; -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); } }
   .bar { display: flex; flex-wrap: wrap; gap: 0 var(--s-5); align-items: center; justify-content: space-between; padding: var(--s-2) 0; }
   .brand { font-weight: 800; color: var(--c-text); text-decoration: none; font-size: var(--t-lg); }
   nav ul { list-style: none; display: flex; flex-wrap: wrap; gap: 0 var(--s-1); margin: 0 0 0 calc(-1 * var(--s-2)); padding: 0; }

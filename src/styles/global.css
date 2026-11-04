@@ -45,3 +45,24 @@ img, svg, iframe { max-width: 100%; display: block; }
 .tag { display: inline-block; font-size: var(--t-sm); font-weight: 700; padding: .1rem .55rem; border-radius: 999px; border: 1px solid currentColor; }
 .tag-verificado { color: var(--c-ok); } .tag-plausivel { color: var(--c-warn); } .tag-especulativo { color: var(--c-spec); }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+
+/* Fundo HUD: grelha estática com máscara radial e linha de varrimento.
+   A linha só se move em ecrãs largos e sem prefers-reduced-motion (transform, sem repintar). */
+.hud { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
+.hud-grid {
+  position: absolute; inset: 0; opacity: .09;
+  background-image: linear-gradient(var(--c-accent-2) 1px, transparent 1px), linear-gradient(90deg, var(--c-accent-2) 1px, transparent 1px);
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(ellipse at 50% 30%, #000 20%, transparent 70%);
+  mask-image: radial-gradient(ellipse at 50% 30%, #000 20%, transparent 70%);
+}
+.hud-scan { position: absolute; left: 0; right: 0; top: 0; height: 1px; opacity: 0; background: linear-gradient(90deg, transparent, var(--c-accent-2), transparent); }
+@media (min-width: 900px) and (prefers-reduced-motion: no-preference) {
+  .hud-scan { opacity: .35; will-change: transform; animation: varrer 14s linear infinite 3s; }
+}
+@keyframes varrer { from { transform: translateY(0); } to { transform: translateY(100vh); } }
+
+/* Pílulas de tags reais. */
+.pills { display: flex; flex-wrap: wrap; gap: var(--s-2); margin: 0; padding: 0; list-style: none; }
+.pill { font-size: var(--t-sm); padding: .15rem .6rem; border-radius: 999px; border: 1px solid var(--c-line); background: var(--c-bg-2); color: var(--c-muted); }
+.pill-strong { color: var(--c-accent-2); border-color: #7cc6ff55; }

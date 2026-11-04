@@ -1,26 +1,45 @@
 ---
-import { href, CONFIDENCE_LABEL, type Short } from '../lib/site';
+import { href, type Short } from '../lib/site';
+import { LICENCES } from '../lib/licences.mjs';
 const { short, level = 3 } = Astro.props as { short: Short; level?: 2 | 3 };
 const H = level === 2 ? 'h2' : 'h3';
 const d = short.data;
+const a = d.sources.find((s) => s.role === 'A');
+const b = d.sources.find((s) => s.role === 'B');
+const licence = a ? LICENCES[a.licence as keyof typeof LICENCES]?.label : null;
+// Capa só em CSS: o tom deriva do id, para cada ficha ter a sua cor. Sem imagens.
+const hue = [...short.id].reduce((h, c) => (h * 31 + c.charCodeAt(0)) % 360, 7);
 ---
 <article class="card short">
-  <H class="t"><a href={href(`/fontes/${short.id}/`)}>{d.headline ?? d.title}</a></H>
-  <dl class="spec">
-    <div><dt>Objeto</dt><dd>{d.object}</dd></div>
-    <div><dt>Instrumento</dt><dd>{d.instrument}</dd></div>
-    <div><dt>Confiança</dt><dd><span class={`tag tag-${d.confidence}`}>{CONFIDENCE_LABEL[d.confidence]}</span></dd></div>
-  </dl>
-  <p class="small muted">{d.description}</p>
+  <div class="cover" style={`--h:${hue}`} aria-hidden="true"><span></span><span></span><span></span></div>
+  <div class="body">
+    <H class="t"><a href={href(`/fontes/${short.id}/`)}>{d.headline ?? d.title}</a></H>
+    <ul class="pills" aria-label="Etiquetas">
+      <li class="pill pill-strong">{d.object}</li>
+      <li class="pill">{d.instrument}</li>
+      {licence && <li class="pill">{licence}</li>}
+    </ul>
+    <dl class="src">
+      {a && <div><dt>Fonte A</dt><dd><a href={a.url} rel="noopener">{a.name}</a></dd></div>}
+      {b ? <div><dt>Fonte B</dt><dd><a href={b.url} rel="noopener">{b.name}</a></dd></div>
+         : <div><dt>Fonte B</dt><dd class="muted">por confirmar</dd></div>}
+    </dl>
+  </div>
 </article>
 <style>
-  .short .t { font-size: var(--t-lg); margin-top: 0; }
-  .short .t a { color: var(--c-text); text-decoration: none; }
-  .short .t a::after { content: ''; position: absolute; inset: 0; border-radius: var(--r-2); }
-  .short { position: relative; transition: border-color .2s; }
-  .short:hover, .short:focus-within { border-color: var(--c-accent-2); }
-  .spec { display: grid; gap: var(--s-1); margin: 0 0 var(--s-3); }
-  .spec div { display: grid; grid-template-columns: 7.5rem 1fr; gap: var(--s-2); }
-  dt { font: 600 var(--t-sm)/1.6 var(--f-mono); color: var(--c-muted); text-transform: uppercase; letter-spacing: .04em; }
-  dd { margin: 0; font-size: var(--t-sm); }
+  .short { padding: 0; overflow: hidden; transition: transform .2s, border-color .2s; }
+  .short:hover, .short:focus-within { border-color: var(--c-accent-2); transform: translateY(-3px); }
+  @media (prefers-reduced-motion: reduce) { .short:hover, .short:focus-within { transform: none; } }
+  .cover { position: relative; height: 110px; border-bottom: 1px solid var(--c-line); background: radial-gradient(circle at 75% 45%, hsl(var(--h) 70% 55% / .35), transparent 45%), linear-gradient(135deg, var(--c-bg-2), var(--c-surface)); }
+  .cover span { position: absolute; left: 75%; top: 45%; border-radius: 50%; border: 1px solid #7cc6ff40; translate: -50% -50%; }
+  .cover span:nth-child(1) { width: 40px; height: 40px; } .cover span:nth-child(2) { width: 90px; height: 90px; } .cover span:nth-child(3) { width: 150px; height: 150px; }
+  .body { padding: var(--s-4) var(--s-5) var(--s-5); }
+  .t { font-size: var(--t-lg); margin: 0 0 var(--s-3); }
+  .t a { color: var(--c-text); text-decoration: none; }
+  .t a:hover { text-decoration: underline; }
+  .pills { margin-bottom: var(--s-3); }
+  .src { margin: 0; display: grid; gap: var(--s-2); font-size: var(--t-sm); }
+  .src dt { font: 700 var(--t-sm)/1.4 var(--f-mono); color: var(--c-accent); text-transform: uppercase; letter-spacing: .05em; }
+  .src dd { margin: 0; }
+  .src a { display: inline-block; padding: .15rem 0; }
 </style>

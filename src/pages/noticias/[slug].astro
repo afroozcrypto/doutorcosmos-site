@@ -45,7 +45,7 @@ const ld = [
     <Content />
     <aside class="card meta">
       <h2>Fontes e licença</h2>
-      {short && <p>Fontes, créditos e nível de confiança: <a href={href(`/fontes/${short.id}/`)}>ficha do vídeo</a>.</p>}
+      {short && <p>Fontes e créditos: <a href={href(`/fontes/${short.id}/`)}>ficha do vídeo</a>.</p>}
       <p>Licença do texto: {lic.url ? <a href={lic.url} rel="license noopener">{lic.label}</a> : lic.label}.</p>
       {post.data.credit && <p>{post.data.credit}</p>}
       <h2>Como foi feito</h2>

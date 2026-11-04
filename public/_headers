@@ -2,7 +2,7 @@
 # CSP ajustado ao build (2026-11-04): sem JavaScript inline executável (só JSON-LD),
 # CSS em <style> e atributos style= (precisa de 'unsafe-inline'), um iframe do youtube-nocookie.
 # Inventário de dist/ (2026-11-04): 0 scripts externos, 0 <img>, 0 fontes, 0 CSS externo; só o iframe do YouTube.
-# HSTS fica de fora de propósito. Bloco noindex do hostname workers.dev: por acrescentar quando o Conde der o hostname.
+# HSTS fica de fora de propósito. Bloco noindex só para o hostname workers.dev, no fim do ficheiro.
 # Lição de 26-10: sem frame-src para o youtube-nocookie, os embeds partem.
 /*
   X-Content-Type-Options: nosniff
@@ -10,7 +10,7 @@
   Content-Security-Policy: default-src 'self'; frame-src https://www.youtube-nocookie.com; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
   Permissions-Policy: camera=(), microphone=(), geolocation=()
 
-# Bloco noindex só para o hostname workers.dev. Preencher após o primeiro deploy
-# (o hostname ainda não existe) e então descomentar. Não inventar o hostname.
-# https://HOSTNAME-A-PREENCHER.workers.dev/*
-#   X-Robots-Tag: noindex
+# Bloco noindex só para o hostname workers.dev (dado pelo Conde a 2026-11-04).
+# Nunca aplicar a todos os hosts: este ficheiro também serve o doutorcosmos.pt.
+https://doutorcosmos-site.cond3.workers.dev/*
+  X-Robots-Tag: noindex

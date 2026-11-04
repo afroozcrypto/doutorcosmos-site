@@ -9,7 +9,7 @@ const posts = await publishedPosts();
   {posts.length === 0 ? <p class="prose"><strong>Ainda sem notícias revistas.</strong> Cada notícia só aparece depois de revista por uma pessoa. Entretanto, veja as <a href={href('/fontes/')}>fichas de fontes</a> dos vídeos ou a sessão ao vivo <a href={href('/sessoes/')}>Ouve o Universo</a>.</p> : (
     <ul class="list">
       {posts.map((p) => (
-        <li>
+        <li class="card">
           <h2><a href={href(`/noticias/${p.id}/`)}>{p.data.title}</a></h2>
           <p class="small muted"><time datetime={p.data.pubDate.toISOString()}>{fmtDate(p.data.pubDate)}</time></p>
           <p>{p.data.description}</p>
@@ -20,7 +20,9 @@ const posts = await publishedPosts();
 </Base>
 <style>
   .list { list-style: none; padding: 0; margin: 0; max-width: var(--w-text); }
-  .list li { border-bottom: 1px solid var(--c-line); padding-bottom: var(--s-4); }
+  .list { display: grid; gap: var(--s-4); }
+  .list li { transition: border-color .2s; }
+  .list li:hover, .list li:focus-within { border-color: var(--c-accent-2); }
   .list h2 { font-size: var(--t-lg); }
   .list h2 a { color: var(--c-text); }
 </style>

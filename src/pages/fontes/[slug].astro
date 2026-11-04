@@ -5,7 +5,7 @@ import JsonLd from '../../components/JsonLd.astro';
 import VideoEmbed from '../../components/VideoEmbed.astro';
 import SourceList from '../../components/SourceList.astro';
 import Facts from '../../components/Facts.astro';
-import { publishedShorts, publishedPosts, fmtDate, isoDuration, CONFIDENCE_LABEL, SITE, type Short, href } from '../../lib/site';
+import { publishedShorts, publishedPosts, fmtDate, isoDuration, SITE, type Short, href } from '../../lib/site';
 
 export async function getStaticPaths() {
   const shorts = await publishedShorts();
@@ -38,8 +38,8 @@ const ld = d.uploadDate ? {
   <h1>{heading}</h1>
   <p class="lead">{d.description}</p>
   <p class="meta small">
-    <span class={`tag tag-${d.confidence}`}>{CONFIDENCE_LABEL[d.confidence]}</span>
-    <a href={href('/como-verificamos/')}>o que isto quer dizer</a>
+    <span class="pill pill-strong">Fontes citadas</span>
+    <a href={href('/como-verificamos/')}>como trabalhamos as fontes</a>
     <span aria-hidden="true">·</span> {d.object}
     <span aria-hidden="true">·</span> {d.instrument}
     {d.uploadDate && <span aria-hidden="true">·</span>}

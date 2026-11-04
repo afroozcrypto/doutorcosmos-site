@@ -4,9 +4,9 @@ import { publishedShorts } from '../../lib/site';
 import ShortCard from '../../components/ShortCard.astro';
 const shorts = await publishedShorts();
 ---
-<Base title="Fontes dos vídeos" description="A ficha de cada vídeo do Doutor Cosmos: fontes primárias, créditos, licenças, nível de confiança e correções.">
+<Base title="Fontes dos vídeos" description="A ficha de cada vídeo do Doutor Cosmos: fontes primárias, créditos, licenças e correções.">
   <h1>Fontes dos vídeos</h1>
-  <p class="muted prose">Cada vídeo tem uma ficha com as fontes A e B, os créditos, a licença e o nível de confiança.</p>
+  <p class="muted prose">Cada vídeo tem uma ficha com as fontes A e B, os créditos e a licença.</p>
   {shorts.length === 0 ? <p>Ainda sem fichas publicadas.</p> : (
     <div class="grid grid-2">{shorts.map((s) => <ShortCard short={s} level={2} />)}</div>
   )}

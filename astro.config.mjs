@@ -8,6 +8,8 @@ export default defineConfig({
   base: process.env.BASE_PATH ?? '/',
   trailingSlash: 'always',
   build: { inlineStylesheets: 'always' },
+  // Scripts sempre em ficheiro (/_astro/*.js), nunca inline: o CSP só permite script-src 'self'.
+  vite: { build: { assetsInlineLimit: 0 } },
   // Rascunhos com noindex ficam fora do sitemap.
   integrations: [sitemap({ filter: (page) => !page.includes('/ouve-o-universo/') })],
 });

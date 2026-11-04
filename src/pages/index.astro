@@ -3,28 +3,45 @@ import Base from '../layouts/Base.astro';
 import JsonLd from '../components/JsonLd.astro';
 import VideoEmbed from '../components/VideoEmbed.astro';
 import Ripples from '../components/Ripples.astro';
-import { SITE, publishedShorts, href } from '../lib/site';
+import ParticleField from '../components/ParticleField.astro';
+import { SITE, publishedShorts, publishedPosts, href } from '../lib/site';
 const shorts = await publishedShorts();
 // Peça de entrada: o Perseu (a única ficha publicada com "medido, traduzido, escolhido").
 const entry = shorts.find((s) => s.id === 'perseus-som-buraco-negro') ?? shorts[0];
 const site = new URL(href('/'), Astro.site).href;
+// Contagens reais, calculadas no build. O bloco só aparece com pelo menos 3 fichas publicadas,
+// e uma contagem a 0 não aparece.
+const reviewed = (await publishedPosts()).filter((p) => p.data.reviewed).length;
+const sourceCount = new Set(shorts.flatMap((s) => s.data.sources.map((x) => x.url))).size;
+const stats = [
+  { n: shorts.length, label: shorts.length === 1 ? 'ficha de fonte' : 'fichas de fonte' },
+  { n: sourceCount, label: sourceCount === 1 ? 'fonte citada' : 'fontes citadas' },
+  { n: reviewed, label: reviewed === 1 ? 'notícia revista' : 'notícias revistas' },
+].filter((x) => x.n > 0);
+const showStats = shorts.length >= 3;
 const ld = [
   { '@type': 'WebSite', name: SITE.name, url: site, inLanguage: 'pt-PT' },
   { '@type': 'Organization', name: SITE.name, url: site, email: SITE.email, sameAs: [SITE.channel] },
 ];
 ---
-<Base title="Doutor Cosmos: o universo em 30 segundos, com fontes" description="Vídeos curtos de astrofísica em português de Portugal. Cada vídeo tem uma ficha com as fontes, o que foi medido e o nível de confiança.">
+<Base title="Doutor Cosmos: o universo em 30 segundos, com fontes" description="Vídeos curtos de astrofísica em português de Portugal. Cada vídeo tem uma ficha com as fontes e o que foi medido.">
   <JsonLd slot="head" data={ld} />
 
   <section class="hero">
+    <ParticleField />
     <Ripples />
     <div class="hero-text">
       <h1>O universo em 30 segundos. <span>Com fontes.</span></h1>
-      <p class="lead">O Doutor Cosmos faz vídeos curtos de astrofísica em português de Portugal. Cada vídeo tem uma ficha com as fontes, o que foi medido e o nível de confiança.</p>
+      <p class="lead">O Doutor Cosmos faz vídeos curtos de astrofísica em português de Portugal. Cada vídeo tem uma ficha com as fontes e o que foi medido.</p>
       <div class="actions">
-        <a class="btn" href={href('/sessoes/')}>Sessão ao vivo para escolas e bibliotecas</a>
+        <a class="btn" href={href('/sessoes/')}>Sessão ao vivo</a>
         <a class="more" href={href('/fontes/')}>Ver as fontes dos vídeos →</a>
       </div>
+      {showStats && (
+        <ul class="stats">
+          {stats.map((x) => <li><b>{x.n}</b><span>{x.label}</span></li>)}
+        </ul>
+      )}
     </div>
   </section>
 
@@ -49,8 +66,18 @@ const ld = [
   )}
 </Base>
 <style>
-  .hero { position: relative; isolation: isolate; padding: var(--s-6) 0 var(--s-5); }
-  @media (min-width: 56rem) { .hero { padding: var(--s-8) 0 var(--s-7); } }
+  .hero { position: relative; isolation: isolate; padding: var(--s-6) var(--s-4) var(--s-5); margin-top: var(--s-4); border: 1px solid var(--c-line); border-radius: var(--r-2); overflow: hidden; background: linear-gradient(180deg, #131c3d99, #070b17e6); }
+  /* Borda a rodar: só em ecrãs largos e sem movimento reduzido. */
+  .hero::before { content: ''; position: absolute; inset: -40%; z-index: -1; background: conic-gradient(from 0deg, transparent 0 70%, #7cc6ff40 80%, transparent 90%); opacity: 0; }
+  @media (min-width: 900px) and (prefers-reduced-motion: no-preference) {
+    .hero::before { opacity: 1; will-change: transform; animation: rodar 16s linear infinite 2.5s; }
+  }
+  @keyframes rodar { to { transform: rotate(360deg); } }
+  .stats { list-style: none; display: flex; flex-wrap: wrap; gap: var(--s-3); padding: 0; margin: var(--s-5) 0 0; }
+  .stats li { background: var(--c-surface); border: 1px solid var(--c-line); border-radius: var(--r-1); padding: var(--s-2) var(--s-4); min-width: 8rem; }
+  .stats b { display: block; color: var(--c-accent); font-size: var(--t-lg); }
+  .stats span { font-size: var(--t-sm); color: var(--c-muted); }
+  @media (min-width: 56rem) { .hero { padding: var(--s-8) var(--s-7) var(--s-7); } }
   .hero-text { position: relative; z-index: 1; max-width: 42rem; }
   .hero h1 { font-size: clamp(2.2rem, 8.5vw, 4.25rem); letter-spacing: -.03em; }
   .hero h1 span { color: var(--c-accent); }
