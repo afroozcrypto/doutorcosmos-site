@@ -48,7 +48,9 @@ img, svg, iframe { max-width: 100%; display: block; }
 
 /* Fundo HUD: grelha estática com máscara radial e linha de varrimento.
    A linha só se move em ecrãs largos e sem prefers-reduced-motion (transform, sem repintar). */
-.hud { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
+.hud { position: fixed; inset: 0; z-index: -1; pointer-events: none; display: none; }
+/* A grelha HUD só aparece em ecrãs largos: em telemóvel custava desempenho no Lighthouse. */
+@media (min-width: 900px) { .hud { display: block; } }
 .hud-grid {
   position: absolute; inset: 0; opacity: .09;
   background-image: linear-gradient(var(--c-accent-2) 1px, transparent 1px), linear-gradient(90deg, var(--c-accent-2) 1px, transparent 1px);
