@@ -9,3 +9,8 @@
   Referrer-Policy: strict-origin-when-cross-origin
   Content-Security-Policy: default-src 'self'; frame-src https://www.youtube-nocookie.com; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
   Permissions-Policy: camera=(), microphone=(), geolocation=()
+
+# Bloco noindex só para o hostname workers.dev. Preencher após o primeiro deploy
+# (o hostname ainda não existe) e então descomentar. Não inventar o hostname.
+# https://HOSTNAME-A-PREENCHER.workers.dev/*
+#   X-Robots-Tag: noindex

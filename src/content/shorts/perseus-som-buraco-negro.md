@@ -9,7 +9,7 @@ object: "Enxame de galáxias de Perseu"
 instrument: "Chandra, raios X"
 facts:
   - value: "57 oitavas"
-    label: "abaixo do dó central: a nota original"
+    label: "abaixo do dó central: a nota original, um si bemol"
   - value: "57 e 58"
     label: "oitavas que a NASA subiu para a ouvirmos"
   - value: "144 mil biliões"
@@ -28,6 +28,18 @@ sources:
     url: "https://www.nasa.gov/universe/new-nasa-black-hole-sonifications-with-a-remix"
     licence: nasa
     credit: "NASA"
+    accessed: 2026-11-04
+  - role: A
+    name: "Chandra Photo Album, Perseus Cluster: Chandra Hears a Supermassive Black Hole in Perseus (9-9-2003)"
+    url: "https://chandra.si.edu/photo/2003/perseus/"
+    licence: nasa
+    credit: "NASA/CXC/IoA/A.Fabian et al."
+    accessed: 2026-11-04
+  - role: A
+    name: "Chandra Press Room, Chandra Hears A Black Hole For The First Time (9-9-2003)"
+    url: "https://chandra.harvard.edu/press/03_releases/press_090903.html"
+    licence: nasa
+    credit: "NASA/CXC"
     accessed: 2026-11-04
   - role: B
     name: "Fabian et al. 2003, A deep Chandra observation of the Perseus cluster: shocks and ripples, MNRAS 344, L43"
