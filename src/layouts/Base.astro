@@ -1,13 +1,16 @@
 ---
 import '../styles/global.css';
 import { SITE, IS_PREVIEW, href } from '../lib/site';
+import { ogSlug } from '../lib/og';
 interface Props { title: string; description: string; ogType?: 'website' | 'article'; noindex?: boolean; }
 const { title, description, ogType = 'website', noindex = false } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
-const ogImage = new URL(href('/og.png'), Astro.site).href;
+// Imagem OG da própria página (src/pages/og/[slug].png.ts).
+const pagePath = Astro.url.pathname.replace(import.meta.env.BASE_URL, '/');
+const ogImage = new URL(href(`/og/${ogSlug(pagePath)}.png`), Astro.site).href;
 const fullTitle = Astro.url.pathname === '/' ? title : `${title} · ${SITE.name}`;
 const nav = [
-  ['/noticias/', 'Notícias'], ['/fontes/', 'Fontes'], ['/sessoes/', 'Sessões'], ['/como-verificamos/', 'Como verificamos'],
+  ['/noticias/', 'Notícias'], ['/fontes/', 'Fontes'], ['/sessoes/', 'Sessões'], ['/como-verificamos/', 'Método'],
 ];
 const here = Astro.url.pathname;
 ---
@@ -63,9 +66,9 @@ const here = Astro.url.pathname;
 </html>
 <style>
   .top { border-bottom: 1px solid var(--c-line); background: #070b17cc; }
-  .bar { display: flex; flex-wrap: wrap; gap: var(--s-2) var(--s-5); align-items: center; justify-content: space-between; padding: var(--s-3) 0; }
+  .bar { display: flex; flex-wrap: wrap; gap: 0 var(--s-5); align-items: center; justify-content: space-between; padding: var(--s-2) 0; }
   .brand { font-weight: 800; color: var(--c-text); text-decoration: none; font-size: var(--t-lg); }
-  nav ul { list-style: none; display: flex; flex-wrap: wrap; gap: 0 var(--s-1); margin: 0; padding: 0; }
+  nav ul { list-style: none; display: flex; flex-wrap: wrap; gap: 0 var(--s-1); margin: 0 0 0 calc(-1 * var(--s-2)); padding: 0; }
   nav a { display: inline-block; padding: var(--s-2) var(--s-2); color: var(--c-muted); text-decoration: none; font-weight: 600; min-height: 44px; line-height: 28px; }
   nav a[aria-current='page'], nav a:hover { color: var(--c-accent); }
   main { padding: var(--s-6) 0 var(--s-8); }

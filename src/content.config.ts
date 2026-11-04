@@ -22,6 +22,10 @@ const shorts = defineCollection({
     uploadDate: z.union([z.string().regex(/^\d{4}-\d{2}-\d{2}$/), z.string().datetime({ offset: true })]).optional(),
     durationSec: z.number().int().positive().optional(),
     thumbnail: z.string().url().startsWith('https://'),
+    // Título da página (o title fica igual ao do YouTube, para o VideoObject).
+    headline: z.string().optional(),
+    // O que foi medido, traduzido e escolhido. Só com texto das fontes A e B.
+    explain: z.object({ measured: z.string(), translated: z.string(), chosen: z.string() }).optional(),
     // Campos iguais em todos os cartões, pela mesma ordem.
     object: z.string(),
     instrument: z.string(),

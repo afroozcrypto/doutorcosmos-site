@@ -4,7 +4,7 @@ export const SITE = {
   name: 'Doutor Cosmos',
   email: 'joao@cond3.tech',
   channel: 'https://www.youtube.com/@DoutorCosmosOfficial',
-  heroLead: 'Astrofísica em português de Portugal. Dados da NASA, ESA e CERN, fonte em cada vídeo, e correções públicas quando erramos.',
+  heroLead: 'Astrofísica em português de Portugal. Dados da NASA e da ESA, fonte em cada vídeo e correções públicas quando erramos.',
 };
 // Prefixa o base (ex.: /doutorcosmos-site) a caminhos internos.
 export const href = (path: string) => `${import.meta.env.BASE_URL.replace(/\/$/, '')}${path}`;

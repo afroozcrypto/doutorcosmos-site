@@ -6,7 +6,7 @@ const posts = await publishedPosts();
 <Base title="Notícias" description="Análises curtas de astrofísica: o que sabemos, o que não sabemos e o que mudou desde cada vídeo.">
   <h1>Notícias</h1>
   <p class="muted prose">Cada notícia separa o que sabemos, o que não sabemos e o que mudou desde o vídeo.</p>
-  {posts.length === 0 ? <p class="prose"><strong>Ainda sem notícias revistas.</strong> Cada notícia só aparece depois de revista por uma pessoa. Entretanto, vê as <a href={href('/fontes/')}>fichas de fontes</a> dos vídeos.</p> : (
+  {posts.length === 0 ? <p class="prose"><strong>Ainda sem notícias revistas.</strong> Cada notícia só aparece depois de revista por uma pessoa. Entretanto, veja as <a href={href('/fontes/')}>fichas de fontes</a> dos vídeos ou a sessão ao vivo <a href={href('/sessoes/')}>Ouve o Universo</a>.</p> : (
     <ul class="list">
       {posts.map((p) => (
         <li>

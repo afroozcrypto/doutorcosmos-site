@@ -14,10 +14,17 @@ export async function getStaticPaths() {
 const { short } = Astro.props as { short: Short };
 const d = short.data;
 const { Content } = await render(short);
+// "Guião e notas" só aparece se o corpo tiver texto (sem contar comentários).
+const hasNotes = (short.body ?? '').replace(/<!--[\s\S]*?-->/g, '').trim().length > 0;
 const posts = (await publishedPosts()).filter((p) => p.data.shortId === short.id);
 const usesNasa = d.sources.some((s) => s.licence === 'nasa');
-const site = Astro.site!.href;
-// VideoObject só com uploadDate (obrigatório para o Google).
+// Fonte B logo a seguir à primeira fonte A, para ficarem as duas no topo.
+const [firstA, ...restA] = d.sources.filter((s) => s.role === 'A');
+const sourcesB = d.sources.filter((s) => s.role === 'B');
+const ordered = [firstA, ...sourcesB, ...restA].filter(Boolean);
+const site = new URL(href('/'), Astro.site).href;
+const heading = d.headline ?? d.title;
+// VideoObject só com uploadDate (obrigatório para o Google). name = título do YouTube.
 const ld = d.uploadDate ? {
   '@type': 'VideoObject', name: d.title, description: d.description, thumbnailUrl: [d.thumbnail],
   uploadDate: d.uploadDate, embedUrl: `https://www.youtube-nocookie.com/embed/${d.youtubeId}`,
@@ -25,57 +32,83 @@ const ld = d.uploadDate ? {
   inLanguage: 'pt-PT', creator: { '@type': 'Organization', name: SITE.name, url: site },
 } : null;
 ---
-<Base title={`Fontes: ${d.title}`} description={d.description}>
+<Base title={heading} description={d.description}>
   {ld && <JsonLd slot="head" data={ld} />}
   <nav aria-label="Caminho" class="crumbs small"><a href={href('/')}>Início</a> › <a href={href('/fontes/')}>Fontes</a></nav>
-  <h1>{d.title}</h1>
+  <h1>{heading}</h1>
+  <p class="lead">{d.description}</p>
+  <p class="meta small">
+    <span class={`tag tag-${d.confidence}`}>{CONFIDENCE_LABEL[d.confidence]}</span>
+    <a href={href('/como-verificamos/')}>o que isto quer dizer</a>
+    <span aria-hidden="true">·</span> {d.object}
+    <span aria-hidden="true">·</span> {d.instrument}
+    {d.uploadDate && <span aria-hidden="true">·</span>}
+    {d.uploadDate && <span>Vídeo de <time datetime={d.uploadDate}>{fmtDate(new Date(d.uploadDate))}</time>{d.durationSec ? `, ${d.durationSec} s` : ''}</span>}
+  </p>
+
   <div class="layout">
-    <VideoEmbed id={d.youtubeId} title={d.title} />
-    <div class="prose">
-      <p class="muted">{d.description}</p>
-      <p>Confiança: <span class={`tag tag-${d.confidence}`}>{CONFIDENCE_LABEL[d.confidence]}</span> <a class="small" href={href('/como-verificamos/')}>o que isto quer dizer</a></p>
-      <dl class="spec">
-        <div><dt>Objeto</dt><dd>{d.object}</dd></div>
-        <div><dt>Instrumento</dt><dd>{d.instrument}</dd></div>
-      </dl>
-      <p class="small muted">
-        {d.uploadDate ? <>Publicado a <time datetime={d.uploadDate}>{fmtDate(new Date(d.uploadDate))}</time></> : 'Data de publicação por confirmar'}
-        {d.durationSec && <> · {d.durationSec} s</>}
-      </p>
-
-      <Facts facts={d.facts} source="fontes A e B abaixo" />
-      <h2>Fontes</h2>
-      <SourceList sources={d.sources} />
-      {d.sourceBNotFound && <p class="small muted">Fonte B ainda não confirmada. Motivo abaixo.</p>}
-      {usesNasa && <p class="small">O uso deste material não implica apoio da NASA.</p>}
-
-      <h2>Guião e notas</h2>
-      <div class="notes"><Content /></div>
-
-      <h2>Como foi feito</h2>
-      <p>{d.madeWith.voice} {d.madeWith.images}</p>
-
-      <h2>Correções</h2>
-      {d.corrections.length === 0 ? <p class="muted">Sem correções.</p> : (
-        <ul>
-          {d.corrections.map((c) => <li><time datetime={c.date.toISOString()}>{fmtDate(c.date)}</time>: antes, {c.before} Agora: {c.after} <a href={c.source} rel="noopener">fonte</a></li>)}
-        </ul>
+    <div class="main">
+      {d.explain && (
+        <ol class="explain" aria-label="Como este som foi feito">
+          <li><span class="k">Medido</span><p>{d.explain.measured}</p></li>
+          <li><span class="k">Traduzido</span><p>{d.explain.translated}</p></li>
+          <li><span class="k">Escolhido</span><p>{d.explain.chosen}</p></li>
+        </ol>
       )}
-
-      {posts.length > 0 && (<>
-        <h2>Análise</h2>
-        <ul>{posts.map((p) => <li><a href={href(`/noticias/${p.id}/`)}>{p.data.title}</a></li>)}</ul>
-      </>)}
+      <h2 id="fontes">Fontes</h2>
+      <SourceList sources={ordered} />
+      {d.sourceBNotFound && <p class="small muted">Fonte B ainda não confirmada.</p>}
+      {usesNasa && <p class="small muted">O uso deste material não implica apoio da NASA.</p>}
     </div>
+    <aside class="side">
+      <VideoEmbed id={d.youtubeId} title={d.title} />
+      <p class="small muted">No YouTube: «{d.title}»</p>
+    </aside>
   </div>
+
+  <Facts facts={d.facts} source="fontes A e B acima" />
+
+  <div class="prose">
+    {hasNotes && (<><h2>Guião e notas</h2><div class="notes"><Content /></div></>)}
+
+    <h2>Como foi feito</h2>
+    <p>{d.madeWith.voice} {d.madeWith.images}</p>
+
+    <h2>Correções</h2>
+    {d.corrections.length === 0 ? <p class="muted">Sem correções até agora.</p> : (
+      <ul>
+        {d.corrections.map((c) => <li><time datetime={c.date.toISOString()}>{fmtDate(c.date)}</time>: antes, {c.before} Agora: {c.after} <a href={c.source} rel="noopener">fonte</a></li>)}
+      </ul>
+    )}
+
+    {posts.length > 0 && (<>
+      <h2>Análise</h2>
+      <ul>{posts.map((p) => <li><a href={href(`/noticias/${p.id}/`)}>{p.data.title}</a></li>)}</ul>
+    </>)}
+  </div>
+
+  <section class="cta card">
+    <h2>Ouvir isto ao vivo</h2>
+    <p>Este som faz parte da sessão «Ouve o Universo», para escolas, bibliotecas e associações.</p>
+    <a class="btn" href={href('/sessoes/')}>Ver a sessão</a>
+  </section>
 </Base>
 <style>
-  .crumbs { margin-bottom: var(--s-4); color: var(--c-muted); }
-  .layout { display: grid; gap: var(--s-6); align-items: start; }
-  @media (min-width: 56rem) { .layout { grid-template-columns: 360px 1fr; } }
-  .spec { display: grid; gap: var(--s-1); margin: 0 0 var(--s-3); }
-  .spec div { display: grid; grid-template-columns: 7.5rem 1fr; gap: var(--s-2); }
-  .spec dt { font: 600 var(--t-sm)/1.6 var(--f-mono); color: var(--c-muted); text-transform: uppercase; letter-spacing: .04em; }
-  .spec dd { margin: 0; }
-  .layout h2:first-of-type { margin-top: var(--s-5); }
+  .crumbs { margin-bottom: var(--s-3); color: var(--c-muted); }
+  h1 { font-size: clamp(1.75rem, 6vw, 2.75rem); max-width: 48rem; }
+  .lead { font-size: var(--t-lg); color: var(--c-muted); max-width: var(--w-text); }
+  .meta { display: flex; flex-wrap: wrap; gap: var(--s-1) var(--s-2); align-items: center; color: var(--c-muted); margin-bottom: var(--s-5); }
+  .meta a { display: inline-block; padding: .3rem 0; }
+  .layout { display: grid; gap: var(--s-5); align-items: start; }
+  @media (min-width: 56rem) { .layout { grid-template-columns: 1fr 300px; gap: var(--s-7); } }
+  .side { max-width: 240px; }
+  @media (min-width: 56rem) { .side { max-width: none; position: sticky; top: var(--s-4); } }
+  .explain { list-style: none; margin: 0 0 var(--s-5); padding: 0; display: grid; gap: var(--s-3); counter-reset: e; }
+  .explain li { counter-increment: e; display: grid; grid-template-columns: 2.25rem 1fr; gap: 0 var(--s-3); align-items: start; background: var(--c-surface); border: 1px solid var(--c-line); border-radius: var(--r-2); padding: var(--s-4); }
+  .explain li::before { content: counter(e); grid-row: span 2; width: 2.25rem; height: 2.25rem; border-radius: 50%; display: grid; place-items: center; font: 700 1rem var(--f-mono); background: var(--c-accent-2); color: var(--c-bg); }
+  .k { font: 700 var(--t-sm)/1.6 var(--f-mono); text-transform: uppercase; letter-spacing: .06em; color: var(--c-accent); }
+  .explain p { margin: 0; }
+  .main h2 { margin-top: 0; }
+  .cta { margin-top: var(--s-7); }
+  .cta h2 { margin-top: 0; }
 </style>

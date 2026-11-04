@@ -1,7 +1,12 @@
 ---
 youtubeId: xJpeXpov6x8
 title: "O som de um buraco negro (sonificação real da NASA) 🔊"
-description: "As ondas de pressão do buraco negro do enxame de Perseu, detetadas pelo Chandra, subidas 57 e 58 oitavas até ao ouvido humano."
+headline: "Perseu: as ondas de pressão de um enxame de galáxias, tornadas audíveis"
+description: "Ondas de pressão no gás do enxame de Perseu, detetadas pelo Chandra e subidas 57 e 58 oitavas pela NASA até ao ouvido humano."
+explain:
+  measured: "Ondas de pressão no gás quente que envolve as galáxias do enxame de Perseu, empurradas pelo buraco negro central. O Chandra detetou-as em raios X em 2003."
+  translated: "Em 2022 a NASA extraiu essas ondas a partir do centro e subiu-as 57 e 58 oitavas, até ao ouvido humano."
+  chosen: "A varredura circular, como um radar, toca as ondas de cada direção. Na imagem, o azul e o roxo são dados de raios X do Chandra."
 uploadDate: "2026-10-26"
 durationSec: 35
 thumbnail: "https://i.ytimg.com/vi/xJpeXpov6x8/hq2.jpg"

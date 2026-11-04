@@ -5,7 +5,7 @@ const H = level === 2 ? 'h2' : 'h3';
 const d = short.data;
 ---
 <article class="card short">
-  <H class="t"><a href={href(`/fontes/${short.id}/`)}>{d.title}</a></H>
+  <H class="t"><a href={href(`/fontes/${short.id}/`)}>{d.headline ?? d.title}</a></H>
   <dl class="spec">
     <div><dt>Objeto</dt><dd>{d.object}</dd></div>
     <div><dt>Instrumento</dt><dd>{d.instrument}</dd></div>
