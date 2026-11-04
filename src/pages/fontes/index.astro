@@ -1,0 +1,25 @@
+---
+import Base from '../../layouts/Base.astro';
+import { publishedShorts, CONFIDENCE_LABEL } from '../../lib/site';
+const shorts = await publishedShorts();
+---
+<Base title="Fontes dos vídeos" description="A ficha de cada vídeo do Doutor Cosmos: fontes primárias, créditos, licenças, nível de confiança e correções.">
+  <h1>Fontes dos vídeos</h1>
+  <p class="muted prose">Cada vídeo tem uma ficha com as fontes A e B, os créditos, a licença e o nível de confiança.</p>
+  {shorts.length === 0 ? <p>Ainda sem fichas publicadas.</p> : (
+    <ul class="list">
+      {shorts.map((s) => (
+        <li class="card">
+          <h2><a href={`/fontes/${s.id}/`}>{s.data.title}</a></h2>
+          <p class="small"><span class={`tag tag-${s.data.confidence}`}>{CONFIDENCE_LABEL[s.data.confidence]}</span></p>
+          <p class="small muted">{s.data.description}</p>
+        </li>
+      ))}
+    </ul>
+  )}
+</Base>
+<style>
+  .list { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--s-4); max-width: var(--w-text); }
+  .list h2 { font-size: var(--t-lg); margin-top: 0; }
+  .list h2 a { color: var(--c-text); }
+</style>

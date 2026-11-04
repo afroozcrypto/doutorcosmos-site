@@ -1,0 +1,39 @@
+@import './tokens.css';
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; min-height: 100vh;
+  font: 400 var(--t-base)/1.65 var(--f-sans);
+  color: var(--c-text);
+  background:
+    radial-gradient(1200px 600px at 80% -10%, #1b2a6b55, transparent 60%),
+    radial-gradient(900px 500px at -10% 10%, #3a1b6b44, transparent 60%),
+    var(--c-bg);
+}
+h1, h2, h3 { line-height: 1.2; margin: 0 0 var(--s-3); text-wrap: balance; }
+h1 { font-size: var(--t-2xl); letter-spacing: -.02em; }
+h2 { font-size: var(--t-xl); margin-top: var(--s-6); }
+h3 { font-size: var(--t-lg); }
+p, li { text-wrap: pretty; }
+p { margin: 0 0 var(--s-4); }
+a { color: var(--c-accent-2); text-underline-offset: 3px; }
+a:hover { color: var(--c-accent); }
+img, svg, iframe { max-width: 100%; display: block; }
+:focus-visible { outline: 3px solid var(--c-accent); outline-offset: 3px; border-radius: 2px; }
+.wrap { width: min(100% - 2rem, var(--w-page)); margin-inline: auto; }
+.prose { max-width: var(--w-text); }
+.muted { color: var(--c-muted); }
+.small { font-size: var(--t-sm); }
+.card { background: var(--c-surface); border: 1px solid var(--c-line); border-radius: var(--r-2); padding: var(--s-5); }
+.grid { display: grid; gap: var(--s-4); }
+@media (min-width: 48rem) { .grid-3 { grid-template-columns: repeat(3, 1fr); } .grid-2 { grid-template-columns: repeat(2, 1fr); } }
+.btn {
+  display: inline-block; padding: .8rem 1.2rem; min-height: 48px; border-radius: var(--r-1);
+  background: var(--c-accent); color: #111; font-weight: 700; text-decoration: none;
+}
+.btn:hover { color: #111; filter: brightness(1.08); }
+.skip { position: absolute; left: -999px; top: var(--s-2); background: var(--c-accent); color: #111; padding: var(--s-2) var(--s-4); z-index: 10; border-radius: var(--r-1); }
+.skip:focus { left: var(--s-2); }
+.tag { display: inline-block; font-size: var(--t-sm); font-weight: 700; padding: .1rem .55rem; border-radius: 999px; border: 1px solid currentColor; }
+.tag-verificado { color: var(--c-ok); } .tag-plausivel { color: var(--c-warn); } .tag-especulativo { color: var(--c-spec); }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }

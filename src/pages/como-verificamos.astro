@@ -1,0 +1,29 @@
+---
+import Base from '../layouts/Base.astro';
+import { LICENCES } from '../lib/licences.mjs';
+const rows = Object.entries(LICENCES);
+---
+<Base title="Como verificamos" description="O método do Doutor Cosmos: fontes primárias, níveis de confiança, licenças das fontes e correções públicas.">
+  <div class="prose">
+    <h1>Como verificamos</h1>
+    <p><strong>Fonte primária.</strong> NASA, ESA, CERN, arXiv e revistas científicas. Cada vídeo cita a fonte na descrição.</p>
+    <p><strong>Níveis de confiança.</strong> Distinguimos o que está verificado, o que é plausível e o que é especulação. Nunca vendemos hipóteses como factos.</p>
+    <h2>Os três níveis</h2>
+    <ul>
+      <li><span class="tag tag-verificado">Verificado</span> Está na fonte primária e confirmámos na página original.</li>
+      <li><span class="tag tag-plausivel">Plausível</span> A fonte apresenta-o como inferência ou modelo, não como observação direta.</li>
+      <li><span class="tag tag-especulativo">Especulativo</span> Hipótese em discussão. Dizemo-lo sempre.</li>
+    </ul>
+    <h2>Fontes A e B</h2>
+    <p>A fonte A é o comunicado ou a página da instituição. A fonte B é o artigo científico ou o dado original. Quando não encontramos a fonte B, dizemo-lo na ficha do vídeo.</p>
+    <h2>Licenças das fontes</h2>
+    <p class="small muted">Regras lidas nas páginas oficiais a 4 de novembro de 2026. Não substituem aconselhamento jurídico.</p>
+    <ul class="small">
+      {rows.map(([, l]) => <li>{l.policy ? <a href={l.policy} rel="noopener">{l.label}</a> : l.label}{l.translate ? '' : ': não traduzimos, só citamos e resumimos'}</li>)}
+    </ul>
+    <p>Não usamos logótipos de agências nem sugerimos que nos apoiam.</p>
+    <h2>Correções</h2>
+    <p>Quando erramos, corrigimos a descrição do vídeo e registamos a mudança em <a href="/correcoes/">Correções</a>.</p>
+  </div>
+</Base>
+<style>.prose li { margin-bottom: var(--s-2); }</style>

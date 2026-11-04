@@ -1,0 +1,26 @@
+/* Tokens: cor, espaço, tipografia. Tema espaço escuro. Contraste AA verificado no Lighthouse. */
+:root {
+  color-scheme: dark;
+  --c-bg: #070b17;
+  --c-bg-2: #0e1530;
+  --c-surface: #131c3d;
+  --c-line: #26315c;
+  --c-text: #e8ecff;
+  --c-muted: #b4bddf;
+  --c-accent: #ffd166;      /* estrela */
+  --c-accent-2: #7cc6ff;    /* nebulosa */
+  --c-ok: #7ee2a8;
+  --c-warn: #ffd166;
+  --c-spec: #ff9f9f;
+
+  --s-1: .25rem; --s-2: .5rem; --s-3: .75rem; --s-4: 1rem;
+  --s-5: 1.5rem; --s-6: 2rem; --s-7: 3rem; --s-8: 4.5rem;
+
+  --f-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --f-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --t-sm: .875rem; --t-base: 1.0625rem; --t-lg: 1.25rem;
+  --t-xl: clamp(1.5rem, 4vw, 1.9rem); --t-2xl: clamp(2rem, 8vw, 3.25rem);
+
+  --r-1: .5rem; --r-2: 1rem;
+  --w-text: 42rem; --w-page: 70rem;
+}

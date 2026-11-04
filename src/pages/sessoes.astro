@@ -1,0 +1,22 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../lib/site';
+const mail = `mailto:${SITE.email}?subject=${encodeURIComponent('Pedido de proposta: Ouve o Universo')}`;
+---
+<Base title="Ouve o Universo: sessões para bibliotecas, escolas e museus" description="Ouve o Universo: sessão ao vivo de 45 minutos com sonificações de dados reais, para bibliotecas, escolas e museus. Preço sob proposta.">
+  <div class="prose">
+    <h1>Ouve o Universo</h1>
+    <p class="lead">Sessão ao vivo de 45 minutos com sonificações de dados reais, para bibliotecas, escolas e museus.</p>
+    <h2>O formato</h2>
+    <ul>
+      <li><strong>Duração:</strong> 45 minutos, ao vivo.</li>
+      <li><strong>Conteúdo:</strong> sonificações, ou seja, dados de telescópios traduzidos em som, com a fonte de cada uma.</li>
+      <li><strong>Para quem:</strong> bibliotecas, escolas e museus.</li>
+    </ul>
+    <h2>Preço</h2>
+    <p>Sob proposta. Diga o local, a data pretendida e o público, e respondo com uma proposta.</p>
+    <p><a class="btn" href={mail}>Pedir proposta por email</a></p>
+    <p class="small muted">Contacto: <a href={mail}>{SITE.email}</a></p>
+  </div>
+</Base>
+<style>.lead { font-size: var(--t-lg); color: var(--c-muted); }</style>

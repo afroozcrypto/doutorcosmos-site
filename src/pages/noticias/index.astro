@@ -1,0 +1,26 @@
+---
+import Base from '../../layouts/Base.astro';
+import { publishedPosts, fmtDate } from '../../lib/site';
+const posts = await publishedPosts();
+---
+<Base title="Notícias" description="Análises curtas de astrofísica: o que sabemos, o que não sabemos e o que mudou desde cada vídeo.">
+  <h1>Notícias</h1>
+  <p class="muted prose">Cada notícia separa o que sabemos, o que não sabemos e o que mudou desde o vídeo.</p>
+  {posts.length === 0 ? <p>Ainda sem notícias publicadas.</p> : (
+    <ul class="list">
+      {posts.map((p) => (
+        <li>
+          <h2><a href={`/noticias/${p.id}/`}>{p.data.title}</a></h2>
+          <p class="small muted"><time datetime={p.data.pubDate.toISOString()}>{fmtDate(p.data.pubDate)}</time></p>
+          <p>{p.data.description}</p>
+        </li>
+      ))}
+    </ul>
+  )}
+</Base>
+<style>
+  .list { list-style: none; padding: 0; margin: 0; max-width: var(--w-text); }
+  .list li { border-bottom: 1px solid var(--c-line); padding-bottom: var(--s-4); }
+  .list h2 { font-size: var(--t-lg); }
+  .list h2 a { color: var(--c-text); }
+</style>

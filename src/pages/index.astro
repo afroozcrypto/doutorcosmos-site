@@ -1,0 +1,73 @@
+---
+import Base from '../layouts/Base.astro';
+import JsonLd from '../components/JsonLd.astro';
+import VideoEmbed from '../components/VideoEmbed.astro';
+import { SITE, publishedShorts, publishedPosts, fmtDate } from '../lib/site';
+const [latest] = await publishedShorts();
+const posts = (await publishedPosts()).slice(0, 3);
+const site = Astro.site!.href;
+const ld = [
+  { '@type': 'WebSite', name: SITE.name, url: site, inLanguage: 'pt-PT' },
+  { '@type': 'Organization', name: SITE.name, url: site, email: SITE.email, sameAs: [SITE.channel], logo: new URL('/og.png', site).href },
+];
+---
+<Base title="Doutor Cosmos: o universo em 30 segundos, com fontes" description="Astrofísica em português de Portugal em vídeos curtos. Cada vídeo tem fonte primária, nível de confiança e correções públicas.">
+  <JsonLd slot="head" data={ld} />
+  <section class="hero">
+    <h1>O universo em 30 segundos. Com fontes.</h1>
+    <p class="lead">{SITE.heroLead}</p>
+    <p><a class="btn" href="/sessoes/">Levar o Universo à sua escola ou biblioteca</a></p>
+  </section>
+
+  {latest && (
+    <section aria-labelledby="ultimo">
+      <h2 id="ultimo">Último vídeo</h2>
+      <div class="latest">
+        <VideoEmbed id={latest.data.youtubeId} title={latest.data.title} />
+        <div>
+          <h3>{latest.data.title}</h3>
+          <p class="muted">{latest.data.description}</p>
+          <p><a href={`/fontes/${latest.id}/`}>Ver fontes, créditos e nível de confiança</a></p>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <section aria-labelledby="noticias">
+    <h2 id="noticias">Notícias</h2>
+    {posts.length === 0 ? <p class="muted">Ainda sem notícias publicadas.</p> : (
+      <ul class="grid grid-3 list">
+        {posts.map((p) => (
+          <li class="card">
+            <h3><a href={`/noticias/${p.id}/`}>{p.data.title}</a></h3>
+            <p class="small muted"><time datetime={p.data.pubDate.toISOString()}>{fmtDate(p.data.pubDate)}</time></p>
+            <p class="small">{p.data.description}</p>
+          </li>
+        ))}
+      </ul>
+    )}
+  </section>
+
+  <section aria-labelledby="verificar" class="prose">
+    <h2 id="verificar">Como verificamos</h2>
+    <p><strong>Fonte primária.</strong> NASA, ESA, CERN, arXiv e revistas científicas. Cada vídeo cita a fonte na descrição.</p>
+    <p><strong>Níveis de confiança.</strong> Distinguimos o que está verificado, o que é plausível e o que é especulação. Nunca vendemos hipóteses como factos.</p>
+    <p><a href="/como-verificamos/">Ler o método completo</a></p>
+  </section>
+
+  <section class="cta card">
+    <h2>Ouve o Universo</h2>
+    <p>Sessão ao vivo de 45 minutos com sonificações de dados reais, para bibliotecas, escolas e museus.</p>
+    <a class="btn" href="/sessoes/">Saber mais sobre as sessões</a>
+  </section>
+</Base>
+<style>
+  .hero { padding: var(--s-6) 0 var(--s-4); }
+  .lead { font-size: var(--t-lg); color: var(--c-muted); max-width: var(--w-text); }
+  .latest { display: grid; gap: var(--s-5); align-items: start; }
+  @media (min-width: 48rem) { .latest { grid-template-columns: 360px 1fr; } }
+  .list { list-style: none; padding: 0; margin: 0; }
+  .list h3 a { color: var(--c-text); }
+  .cta { margin-top: var(--s-7); }
+  .cta h2 { margin-top: 0; }
+</style>

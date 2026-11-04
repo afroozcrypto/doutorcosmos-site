@@ -1,0 +1,71 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import JsonLd from '../../components/JsonLd.astro';
+import VideoEmbed from '../../components/VideoEmbed.astro';
+import SourceList from '../../components/SourceList.astro';
+import { publishedShorts, publishedPosts, fmtDate, isoDuration, CONFIDENCE_LABEL, SITE, type Short } from '../../lib/site';
+
+export async function getStaticPaths() {
+  const shorts = await publishedShorts();
+  return shorts.map((short) => ({ params: { slug: short.id }, props: { short } }));
+}
+const { short } = Astro.props as { short: Short };
+const d = short.data;
+const { Content } = await render(short);
+const posts = (await publishedPosts()).filter((p) => p.data.shortId === short.id);
+const usesNasa = d.sources.some((s) => s.licence === 'nasa');
+const site = Astro.site!.href;
+// VideoObject só com uploadDate (obrigatório para o Google).
+const ld = d.uploadDate ? {
+  '@type': 'VideoObject', name: d.title, description: d.description, thumbnailUrl: [d.thumbnail],
+  uploadDate: d.uploadDate, embedUrl: `https://www.youtube-nocookie.com/embed/${d.youtubeId}`,
+  ...(d.durationSec ? { duration: isoDuration(d.durationSec) } : {}),
+  inLanguage: 'pt-PT', creator: { '@type': 'Organization', name: SITE.name, url: site },
+} : null;
+---
+<Base title={`Fontes: ${d.title}`} description={d.description}>
+  {ld && <JsonLd slot="head" data={ld} />}
+  <nav aria-label="Caminho" class="crumbs small"><a href="/">Início</a> › <a href="/fontes/">Fontes</a></nav>
+  <h1>{d.title}</h1>
+  <div class="layout">
+    <VideoEmbed id={d.youtubeId} title={d.title} />
+    <div class="prose">
+      <p class="muted">{d.description}</p>
+      <p>Confiança: <span class={`tag tag-${d.confidence}`}>{CONFIDENCE_LABEL[d.confidence]}</span> <a class="small" href="/como-verificamos/">o que isto quer dizer</a></p>
+      <p class="small muted">
+        {d.uploadDate ? <>Publicado a <time datetime={d.uploadDate}>{fmtDate(new Date(d.uploadDate))}</time></> : 'Data de publicação por confirmar'}
+        {d.durationSec && <> · {d.durationSec} s</>}
+      </p>
+
+      <h2>Fontes</h2>
+      <SourceList sources={d.sources} />
+      {d.sourceBNotFound && <p class="small muted">Fonte B ainda não confirmada. Motivo abaixo.</p>}
+      {usesNasa && <p class="small">O uso deste material não implica apoio da NASA.</p>}
+
+      <h2>Guião e notas</h2>
+      <div class="notes"><Content /></div>
+
+      <h2>Como foi feito</h2>
+      <p>{d.madeWith.voice} {d.madeWith.images}</p>
+
+      <h2>Correções</h2>
+      {d.corrections.length === 0 ? <p class="muted">Sem correções.</p> : (
+        <ul>
+          {d.corrections.map((c) => <li><time datetime={c.date.toISOString()}>{fmtDate(c.date)}</time>: antes, {c.before} Agora: {c.after} <a href={c.source} rel="noopener">fonte</a></li>)}
+        </ul>
+      )}
+
+      {posts.length > 0 && (<>
+        <h2>Análise</h2>
+        <ul>{posts.map((p) => <li><a href={`/noticias/${p.id}/`}>{p.data.title}</a></li>)}</ul>
+      </>)}
+    </div>
+  </div>
+</Base>
+<style>
+  .crumbs { margin-bottom: var(--s-4); color: var(--c-muted); }
+  .layout { display: grid; gap: var(--s-6); align-items: start; }
+  @media (min-width: 56rem) { .layout { grid-template-columns: 360px 1fr; } }
+  .layout h2:first-of-type { margin-top: var(--s-5); }
+</style>
