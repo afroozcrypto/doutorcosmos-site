@@ -5,6 +5,7 @@ import JsonLd from '../../components/JsonLd.astro';
 import VideoEmbed from '../../components/VideoEmbed.astro';
 import SourceList from '../../components/SourceList.astro';
 import Facts from '../../components/Facts.astro';
+import OctaveExplorer from '../../components/OctaveExplorer.astro';
 import { publishedShorts, publishedPosts, fmtDate, isoDuration, SITE, type Short, href } from '../../lib/site';
 
 export async function getStaticPaths() {
@@ -68,6 +69,25 @@ const ld = d.uploadDate ? {
 
   <Facts facts={d.facts} source="fontes A e B acima" />
 
+  {d.visualDescription && (
+    <section class="vdesc card" aria-labelledby="vdesc-t">
+      <h2 id="vdesc-t">O que se vê no vídeo</h2>
+      <p>{d.visualDescription.text}</p>
+      <p class="small muted">{d.visualDescription.credit} <a href={d.visualDescription.source} rel="noopener">Texto original</a></p>
+    </section>
+  )}
+
+  {d.interactive === 'oitavas' && <OctaveExplorer />}
+
+  {d.technical.length > 0 && (
+    <details class="tech card">
+      <summary>Detalhe técnico, para quem quer ir mais fundo</summary>
+      <dl>
+        {d.technical.map((t) => <div><dt>{t.label}</dt><dd>{t.value} <a href={t.source} rel="noopener" class="small">fonte</a></dd></div>)}
+      </dl>
+    </details>
+  )}
+
   <div class="prose">
     {hasNotes && (<><h2>Guião e notas</h2><div class="notes"><Content /></div></>)}
 
@@ -109,6 +129,16 @@ const ld = d.uploadDate ? {
   .k { font: 700 var(--t-sm)/1.6 var(--f-mono); text-transform: uppercase; letter-spacing: .06em; color: var(--c-accent); }
   .explain p { margin: 0; }
   .main h2 { margin-top: 0; }
+  .vdesc { margin-top: var(--s-5); }
+  .vdesc h2 { margin-top: 0; font-size: var(--t-lg); }
+  .tech { margin-top: var(--s-5); }
+  .tech summary { cursor: pointer; font-weight: 700; min-height: 44px; display: flex; align-items: center; }
+  .tech dl { display: grid; gap: var(--s-3); margin: var(--s-4) 0 0; }
+  .tech dl div { display: grid; gap: var(--s-1); }
+  @media (min-width: 48rem) { .tech dl div { grid-template-columns: 18rem 1fr; } }
+  .tech dt { color: var(--c-muted); font-size: var(--t-sm); }
+  .tech dd { margin: 0; font-family: var(--f-mono); color: var(--c-accent); }
+  .tech dd a { font-family: var(--f-sans); display: inline-block; padding: .2rem 0; }
   .cta { margin-top: var(--s-7); }
   .cta h2 { margin-top: 0; }
 </style>

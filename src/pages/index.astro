@@ -59,6 +59,7 @@ const ld = [
             </dl>
           ) : <p class="muted">{entry.data.description}</p>}
           <p><a href={href(`/fontes/${entry.id}/`)}>Ficha completa, com as fontes A e B →</a></p>
+          {entry.data.interactive === 'oitavas' && <p><a href={href(`/fontes/${entry.id}/#oct-t`)}>Experimente subir as 57 oitavas, com som →</a></p>}
         </div>
         <div class="vid"><VideoEmbed id={entry.data.youtubeId} title={entry.data.title} /></div>
       </div>

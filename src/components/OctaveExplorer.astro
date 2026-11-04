@@ -1,0 +1,117 @@
+---
+// "Sobe as oitavas": mostra o que a NASA fez aos dados do Perseu.
+// Factos (chandra.si.edu/sound/perseus.html): a nota original está 57 oitavas abaixo do dó central;
+// a sonificação subiu-a 57 e 58 oitavas. Cada oitava duplica a frequência.
+// O som é um si bemol sintetizado no browser (si bemol 3 = 233,08 Hz, com lá 4 = 440 Hz),
+// só para mostrar o efeito. Não é a gravação da NASA.
+// Som só com clique (WCAG 1.4.2, técnica G171), volume baixo, pára com a aba escondida.
+// Sem JavaScript, os controlos ficam escondidos e fica o texto.
+---
+<section class="octaves card" aria-labelledby="oct-t">
+  <p class="eyebrow">Experimente</p>
+  <h2 id="oct-t">Sobe as oitavas</h2>
+  <p>A nota que o Chandra mediu está 57 oitavas abaixo do dó central: lenta demais para qualquer ouvido. Cada oitava que se sobe duplica a frequência. Suba-a como a NASA fez.</p>
+
+  <div class="ui" hidden data-octaves>
+    <label for="oct-n">Oitavas subidas: <output id="oct-out" for="oct-n">0</output></label>
+    <input id="oct-n" type="range" min="0" max="58" step="1" value="0" />
+    <div class="meter" aria-hidden="true"><span></span></div>
+    <p class="status" id="oct-status" aria-live="polite">Frequência multiplicada por 1. Inaudível.</p>
+    <div class="row">
+      <button type="button" class="btn" id="oct-play" aria-pressed="false">Ouvir</button>
+      <button type="button" class="ghost" id="oct-57">Ir para 57</button>
+    </div>
+    <p class="small muted">O som é um si bemol sintetizado neste browser, só para mostrar o efeito. Não é a gravação da NASA. Começa só quando carrega em «Ouvir».</p>
+    <p class="small muted">Si bemol 3 = 233,08 Hz (com lá 4 = 440 Hz), limite de audição de cerca de 20 Hz e os Hz mostrados: valores convencionais e cálculo desta demonstração, não da NASA.</p>
+  </div>
+</section>
+
+<style>
+  .octaves { margin-top: var(--s-6); }
+  .octaves h2 { margin-top: 0; }
+  .ui { display: grid; gap: var(--s-3); max-width: 34rem; }
+  .ui[hidden] { display: none; }
+  label { font-weight: 700; }
+  output { font: 700 var(--t-lg) var(--f-mono); color: var(--c-accent); }
+  input[type='range'] { width: 100%; min-height: 44px; accent-color: var(--c-accent); }
+  .meter { height: 8px; border-radius: 4px; background: var(--c-bg-2); border: 1px solid var(--c-line); overflow: hidden; }
+  .meter span { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--c-accent-2), var(--c-accent)); transition: width .15s; }
+  .status { font-family: var(--f-mono); font-size: var(--t-sm); margin: 0; }
+  .row { display: flex; flex-wrap: wrap; gap: var(--s-3); }
+  .ghost { min-height: 48px; padding: .8rem 1.2rem; border-radius: var(--r-1); border: 2px solid var(--c-accent-2); background: transparent; color: var(--c-text); font: inherit; font-weight: 700; cursor: pointer; }
+  .btn { border: 0; cursor: pointer; font: inherit; font-weight: 700; }
+  @media (prefers-reduced-motion: reduce) { .meter span { transition: none; } }
+</style>
+
+<script>
+  const BFLAT3 = 233.08; // si bemol 3, com lá 4 = 440 Hz
+  const ORIGINAL = 57;   // oitavas abaixo do dó central (Chandra)
+  const MIN_HEAR = 20;   // limite inferior típico da audição humana, em Hz
+
+  const ui = document.querySelector<HTMLElement>('[data-octaves]');
+  const range = document.querySelector<HTMLInputElement>('#oct-n');
+  const out = document.querySelector<HTMLOutputElement>('#oct-out');
+  const status = document.querySelector<HTMLElement>('#oct-status');
+  const play = document.querySelector<HTMLButtonElement>('#oct-play');
+  const jump = document.querySelector<HTMLButtonElement>('#oct-57');
+  const bar = ui?.querySelector<HTMLElement>('.meter span');
+
+  let ctx: AudioContext | null = null;
+  let osc: OscillatorNode | null = null;
+  let gain: GainNode | null = null;
+
+  const fmt = new Intl.NumberFormat('pt-PT', { maximumFractionDigits: 0 });
+  const freq = (n: number) => BFLAT3 * Math.pow(2, n - ORIGINAL);
+
+  function factorText(n: number) {
+    if (n === 57) return '144 mil biliões';
+    if (n === 58) return '288 mil biliões';
+    const f = Math.pow(2, n);
+    return f < 1e6 ? fmt.format(f) : `cerca de ${f.toExponential(1).replace('e+', ' × 10^').replace('.', ',')}`;
+  }
+
+  function update() {
+    if (!range || !out || !status || !bar) return;
+    const n = Number(range.value);
+    const f = freq(n);
+    const audible = f >= MIN_HEAR;
+    out.textContent = String(n);
+    bar.style.width = `${(n / 58) * 100}%`;
+    status.textContent = `Frequência multiplicada por ${factorText(n)}. ` +
+      (audible ? `Audível: cerca de ${fmt.format(f)} Hz nesta demonstração.` : 'Inaudível.') +
+      (n === 57 || n === 58 ? ' É uma das subidas que a NASA usou.' : '');
+    if (osc && ctx) osc.frequency.setTargetAtTime(Math.max(f, 1), ctx.currentTime, 0.05);
+    if (gain && ctx) gain.gain.setTargetAtTime(audible ? 0.06 : 0, ctx.currentTime, 0.05);
+  }
+
+  function start() {
+    ctx = ctx ?? new AudioContext();
+    osc = ctx.createOscillator();
+    gain = ctx.createGain();
+    osc.type = 'sine';
+    gain.gain.value = 0;
+    osc.connect(gain).connect(ctx.destination);
+    osc.start();
+    play?.setAttribute('aria-pressed', 'true');
+    if (play) play.textContent = 'Parar';
+    update();
+  }
+
+  function stop() {
+    if (gain && ctx) gain.gain.setTargetAtTime(0, ctx.currentTime, 0.03);
+    const o = osc;
+    setTimeout(() => o?.stop(), 150);
+    osc = null; gain = null;
+    play?.setAttribute('aria-pressed', 'false');
+    if (play) play.textContent = 'Ouvir';
+  }
+
+  if (ui && range && play && jump) {
+    ui.hidden = false;
+    range.addEventListener('input', update);
+    play.addEventListener('click', () => (osc ? stop() : start()));
+    jump.addEventListener('click', () => { range.value = '57'; update(); range.focus(); });
+    document.addEventListener('visibilitychange', () => { if (document.hidden && osc) stop(); });
+    update();
+  }
+</script>

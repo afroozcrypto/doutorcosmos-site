@@ -10,6 +10,24 @@ explain:
 uploadDate: "2026-10-26"
 durationSec: 35
 thumbnail: "https://i.ytimg.com/vi/xJpeXpov6x8/hq2.jpg"
+visualDescription:
+  text: "A imagem parece o centro de um funil de algodão-doce roxo, visto de cima. Os azuis e roxos são dados de raios X do Chandra. No centro, o buraco negro aparece como um aglomerado branco e brilhante. No vídeo, uma linha roxa luminosa parte desse centro e roda à volta da imagem, como o ponteiro de um relógio ou o braço de um radar. À medida que roda, ouvem-se as ondas subidas de oitava que saem em cada direção."
+  source: "https://chandra.harvard.edu/photo/2022/sonify5/sonify5_description.txt"
+  credit: "Descrição visual de NASA/CXC (4-5-2022), traduzida para PT-PT com IA."
+interactive: oitavas
+technical:
+  - label: "Duração da observação do Chandra"
+    value: "quase 200 mil segundos"
+    source: "https://academic.oup.com/mnras/article/344/3/L43/1015198"
+  - label: "Velocidade das ondas no gás (a 5 keV)"
+    value: "cerca de 1170 km/s"
+    source: "https://academic.oup.com/mnras/article/344/3/L43/1015198"
+  - label: "Distância entre ondas (comprimento de onda)"
+    value: "cerca de 11 kpc"
+    source: "https://academic.oup.com/mnras/article/344/3/L43/1015198"
+  - label: "Período de cada onda"
+    value: "cerca de 9,6 milhões de anos"
+    source: "https://academic.oup.com/mnras/article/344/3/L43/1015198"
 object: "Enxame de galáxias de Perseu"
 instrument: "Chandra, raios X"
 facts:

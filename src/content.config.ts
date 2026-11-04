@@ -26,6 +26,12 @@ const shorts = defineCollection({
     headline: z.string().optional(),
     // O que foi medido, traduzido e escolhido. Só com texto das fontes A e B.
     explain: z.object({ measured: z.string(), translated: z.string(), chosen: z.string() }).optional(),
+    // Descrição visual para quem não vê o vídeo (texto oficial traduzido, com fonte).
+    visualDescription: z.object({ text: z.string(), source: z.string().url().startsWith('https://'), credit: z.string() }).optional(),
+    // Peça interativa opcional na ficha.
+    interactive: z.enum(['oitavas']).optional(),
+    // Detalhe técnico para quem quer ir mais fundo. Cada valor tem a sua fonte.
+    technical: z.array(z.object({ label: z.string(), value: z.string(), source: z.string().url().startsWith('https://') })).default([]),
     // Campos iguais em todos os cartões, pela mesma ordem.
     object: z.string(),
     instrument: z.string(),
