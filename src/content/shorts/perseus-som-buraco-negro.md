@@ -2,7 +2,7 @@
 youtubeId: xJpeXpov6x8
 title: "O som de um buraco negro (sonificação real da NASA) 🔊"
 description: "As ondas de pressão do buraco negro do enxame de Perseu, detetadas pelo Chandra, subidas 57 e 58 oitavas até ao ouvido humano."
-# uploadDate: TODO (YouTube Studio > Conteúdo > Data)
+uploadDate: "2026-10-26"
 durationSec: 35
 thumbnail: "https://i.ytimg.com/vi/xJpeXpov6x8/hq2.jpg"
 object: "Enxame de galáxias de Perseu"

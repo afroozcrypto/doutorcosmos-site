@@ -18,8 +18,8 @@ const shorts = defineCollection({
     youtubeId: z.string().regex(/^[A-Za-z0-9_-]{11}$/),
     title: z.string().min(1),
     description: z.string().max(160),
-    // ISO com fuso, do YouTube Studio. Por preencher pelo Conde.
-    uploadDate: z.string().datetime({ offset: true }).optional(),
+    // Do YouTube Studio: data (AAAA-MM-DD) ou data e hora ISO com fuso. A hora exata fica [por confirmar].
+    uploadDate: z.union([z.string().regex(/^\d{4}-\d{2}-\d{2}$/), z.string().datetime({ offset: true })]).optional(),
     durationSec: z.number().int().positive().optional(),
     thumbnail: z.string().url().startsWith('https://'),
     // Campos iguais em todos os cartões, pela mesma ordem.

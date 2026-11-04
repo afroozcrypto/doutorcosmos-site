@@ -2,8 +2,8 @@
 youtubeId: tu0-kWbnVs0
 title: "Humanos À Lua Outra Vez (Artemis II, Abril 2026) 🚀"
 description: "Artemis II: quatro astronautas à volta da Lua e de volta, de 1 a 10 de abril de 2026. Recorde de distância à Terra."
-# uploadDate: TODO
-# durationSec: TODO
+uploadDate: "2026-07-07"
+durationSec: 39
 thumbnail: "https://i.ytimg.com/vi/tu0-kWbnVs0/hq2.jpg"
 object: "Lua, missão tripulada"
 instrument: "Orion e SLS"
@@ -38,8 +38,15 @@ corrections:
     source: "https://www.nasa.gov/news-release/nasa-welcomes-record-setting-artemis-ii-moonfarers-back-to-earth/"
 madeWith:
   voice: "Personagem e voz sintética (Edge TTS)."
-  images: "TODO: indicar que imagens são reais e quais são ilustrações IA."
+  images: "[por confirmar] quais imagens são reais e quais são ilustrações IA."
 draft: true
 ---
 
-<!-- TODO: colar o guião do Short. -->
+## Guião
+
+[por confirmar] O texto gravado não está no repositório. Os factos do vídeo estão nas fontes A e B acima.
+
+## Como foi feito
+
+Voz: personagem e voz sintética (Edge TTS). Imagens: [por confirmar].
+
